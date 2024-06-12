@@ -1,0 +1,110 @@
+1. Learn about Git.
+
+	a. What is Git? What is a repository?
+
+Git is a program designed to track changes and create a version history for text files. It is known as a Distributed Version Control System since each developer can copy the project to their machine. A repository contains all of a project's files as well as version history. It works like a collaborative folder
+
+
+	b. How do you persist changes you make locally in the repository? How do you sync them
+	with the remote server s.t. other developers have access to them?
+
+"git commit" will 'save' changes to the local repository and create a log. When those changes are ready to be sent to the remote server, use "git push".
+
+
+	c. What should a commit message convey? How should it be structured?
+
+A commit message should explain what the commit will do. The first line should be a short summary of what will be changed. Following the summary, use a blank line and then provide additional detail as to what was changed and why. Explain what effect the change will have and why you decided to make it.
+
+For example:
+"Fix errors with compiling
+
+In order to ensure that..."
+
+
+	d. When should you commit? What should you commit? When should you push?
+
+You should commit changes frequently whenever something has been added or changed. Multiple small commits are better than one big commit because then you can troubleshoot easier. Only push when a larger change has been made. NEVER push incomplete or potentially unsafe/damaging code. Commit - more the merrier (like ctrl+s) Push - thoughtfully and carefully
+
+
+	e. If you’ve accidentally added a file to the index that does not belong in the next commit,
+	what do you do?
+
+The "git reset <filename>" command can remove a file that has been added to the index using "git add"
+
+
+	f. How do you view a repository’s history?
+
+"git log" can be used to view the project's history and "git log -p" can be used to see the complete diffs throughout
+
+
+	g. How do you check if your local repository is clean? How do you know if its up to date?
+
+"git clean" can be used to remove files that are in the repository but are no longer being tracked under version control. Removing these files can help clean the local repository. "git status" will provide information regarding pushes and changes that have been made to the remote server that haven't been made to your local repository. A dirty repository has modifications that haven't been committed 
+
+
+	h. How do you retrieve changes that other people have posted to the remote server? How
+	do you compare those changes to your local copy? How do you apply them to your
+	local copy? With which types of files do these version control tools work? With which
+	types of files do they not work?
+
+"git pull" can be used to update a local branch to match the remote server by following the changes made to the remote server since the local branch was first pulled. It's important to not have any uncomitted changes before using git pull since it can cause problems with the new updates. Make sure the local version is working before pulling the newest version. "git difftool <hash>" can be used to show the differences made between the given hash and the current version. This will only work with text files, images and excel sheets are not viable for version control. Git cannot tell what specifically has changed with these types of files, only that they are different. TRY TO KEEP IMAGES AND EXCEL SHEETS OUT OF THE REPOSITORY!
+
+
+	i. Suppose you’ve created a new project in path/to/my-project/. You now need to track it
+	with Git and connect it to Gitlab. How would you do this?
+
+First, GitBash/Eclipse needs to be linked to GitHub. After navigating to the local project folder, use "git init" to create a repository for that project. Use "git remote add origin <link to remote repo>" to connect the local repository to the GitHub repo. Then, use "git add ." to add all of the files and those before it to the index. Then, use "git commit" and "git push origin <branch>" to commit and push them to the remote repository.
+
+
+	j. Suppose you’ve been working on the existing my-repo/file.txt, but realize you’ve made
+	poor decisions. You decide to rip out your changes and start over. How would you do
+	this?
+
+Error made before Commit, before Push. "git restore <filename>" can be used to restore a file to its most recent unmodified state. In this example, "git restore file.txt" would fix the mistake, provided there have not been any commits.
+
+
+	k. Suppose you’ve committed many changes to your local copy of my-repo and realize
+	that they’re no longer relevant. How would you discard them?
+
+Error made after Commit, before Push. "git reset <hash>" can be used to 'undo' changes made to the file by returning the file's state to that hash. Changes can then be made or the changes can be removed entirely using "git restore <filename>" as above.
+
+
+	l. Suppose that you’ve pushed many changes to the remote repository then realize that
+	the client changed their mind. How would you undo these changes?
+
+Error made after Commit, after Push. "git checkout -f <desired hash> -- ." can be used to generate the old state of the file using the desired hash. This can then be added, commited, and pushed just like other changes. This also ensures that the history is not lost by making the fixes another Commit that can be logged. However, this would unod the work of others if they had made changes to the same branch that was being reset. "git revert -n <mistake hash>" can be used repeatedly followed by "git commit" and "git push origin <branch>". This method targets the mistakes specifically and would hopefully avoid interferring with the work of others. In practice, when an error is pushed, we try and push a fix for that error. We usually don't make use of the commands.
+
+
+2. Spend some time experimenting with Git.
+	a. Your Git repository is titled user-[USER], where [USER] is your username. If user-
+	[USER] does not exist, ask our DevOps engineer to create it for you. You will need
+	to clone your repository to your local file system. View your repository on GitLab and
+	copy the url for cloning, then use git clone <url> [directory] on the command
+	line to clone the repository, with an option to rename the directory.
+
+	b. Experiment with the commands learned from the reading by creating files, editing files,
+	etc.
+
+	c. Eclipse is a text editor with many features: one being that it makes it easy to interact
+	with your git repo without using the command line, but the command line is always an
+	option.
+
+	Import your project into Eclipse by opening Eclipse and selecting File > Import, then
+	select Git > Projects from Git and hit Next >. Since you have already cloned your
+	repository, you will select to import an Existing Local Repository. However, Eclipse can
+	clone and import for you if you select Clone URI instead. You can use this option if you
+	need to clone in the future. Select your repository user-[USER] and finish importing.
+
+	d. Take some time to get comfortable with Eclipse. There are different perspectives avail-
+	able for you to use. The Git perspective will allow you to edit your documents and
+	interact with your git repo to easily commit, push, or pull changes.
+
+	e. Clean out user-[USER] s.t. it’s restored to its original state; push it to Gitlab. The .project
+	and .gitignore files should be persisted; .project is an auto-generated Eclipse file.
+
+	f. Explore Git and read Gitlab help; debrief on Gitlab’s help page to answer any Qs. There
+	is no expectation of a full understanding, but working knowledge is helpful.
+
+When finished, prepare and walk us through a short sequence of events showing us what you
+learned about Git. In addition, copy onboarding/fundamentals/git.txt to your git reposi-
+tory, along with onboarding tasks to follow
