@@ -1,0 +1,73 @@
+1.3.2 Exercises
+1. Is the example below a ’well formed’ XML document? If not, make the corrections needed.
+
+OLD:
+<?xml version=1.0>
+<to>Candidate</to>
+<from>Onboarding</from>
+<body>XML is fun!</body>
+
+REVISED:
+<?xml version="1.0"?>
+<message>
+	<to>Candidate</to>
+	<from>Onboarding</from>
+	<body>XML is fun!</body>
+</message>
+
+CHANGES MADE:
+	- Added a Root Element <message>
+	- Quotes added to the version number in the prolog
+	- Added a '?' to the end of the prolog
+
+In a 'well formed' XML document:
+	- There must be a root element (in this case <message>)
+	- Elements need a closing tag (<body> needs </body>, for example)
+	- Tags must match (they're case sensative)
+	- Elements must be properly nested (think about it like parentheses)
+		- <A><B><C>Text<C><B><A> is correct
+		- <A><B><C>Text<A><B><C> is incorrect
+	- Attribute values must be quoted (usually following an '=', such as version="1.0")
+
+
+2. How can you get the XML parser to ignore a section of your XML file and treat it as a block
+of character data?
+
+The CDATA section can be used to treat everything within as textual, non-marked-up content.
+For example,
+	<![CDATA[Spinach < Ice Cream]]> is read as "Spinach < Ice Cream", despite "<" being a predefined entity
+	<![CDATA[<to>Candidate</to>]]> would be interpreted literally as "<to>Candidate</to>"
+	In <to>Candidate</to>, the 'to's are interpreted as markup and only "Candidte" remains
+
+
+3. What are the reserved characters in XML, and how can you escape them?
+
+Reserved characters can be escaped by using a code contained within & and ;.
+Reserved characters and their escape sequences include the following:
+	- < (less than) - &lt;
+	- > (greater than) - &gt;
+	- & (ampersand) - &amp;
+	- ' (apostrophe) - &apos;
+	- " (quotation) - &quot;
+
+
+
+4. What is the correct syntax for declaring the version of an XML document?
+
+The correct syntax is <?xml version="1.0"?>
+
+
+5. How do you insert single-line comments into an XML document? Multi-line comments?
+
+Single line comments can be done using <!-- Comment goes here -->
+A Multi-line comment can be done in the same way, just over multiple lines
+<!-- 
+Comment
+goes
+here
+or
+here
+or
+even
+here! 
+-->
