@@ -1,0 +1,223 @@
+1.5.2 Exercises
+
+1. What is a regular expression?
+
+
+
+
+2. What are common use cases for regular expressions?
+
+
+
+
+3. When should you (not) use regular expressions?
+
+
+
+
+4. What is a greedy quantifer?
+
+
+
+
+5. What is a non-greedy (lazy) quantifier?
+
+
+
+
+6. What is the behavior of a non-greedy quantifier?
+
+
+
+
+7. What is a character class?
+
+
+
+
+8. What shorthand character classes are typically available?
+
+
+
+
+9. What is a group?
+
+
+
+
+10. What is a postitive lookahead?
+
+
+
+
+11. What is a negative lookahead?
+
+
+
+
+12. What is a postive lookbehind?
+
+
+
+
+13. What is a negative lookbehind?
+
+
+
+
+14. What is a back reference?
+
+
+
+
+15. What are common flags? How do you specify them?
+
+
+
+
+16. What is the common regular expression syntax?
+
+
+
+
+17. How do you identify the start and end of a line?
+
+
+
+
+18. How do you specify a regex as case-insensitive?
+
+
+
+
+19. How do you indicate that a character must occur:
+a. 0 or more times?
+b. 1 or more times?
+c. 0 or 1 times?
+d. n (> 0) times?
+e. n (> 0) or more times?
+f. at least n (> 0) but no more than m (> n) times?
+g. no more than m (> 0) times?
+
+
+
+
+20. How do you refer to the collection of:
+a. Alpha characters?
+b. Non-alpha characters?
+c. Digits?
+d. Non-digits?
+e. Alphanumeric characters?
+f. Non-alphanumeric characters?
+g. White space characters?
+h. Non-white space characters?
+Are there multiple approaches to the above questions? If so, what are they?
+
+
+
+
+21. How do you indicate that any character is acceptable?
+
+
+
+
+22. How do you indicate that a ’?’ is acceptable?
+
+
+
+
+23. How do you indicate that a ’[’ is acceptable?
+
+
+
+
+24. How do you indicate that ’\’ and ’w’ are acceptable?
+
+
+
+
+25. How do you account for a newline character between words?
+
+
+
+
+26. How do you indicate that any alpha character not ’a’, ’b’, or ’c’ is permitted?
+
+
+
+
+27. How do you indicate that any word character not ’a’, ’b’, or ’c’ is permitted?
+
+
+
+
+28. How do you indicate that any 10 digit ID without a digit occurring 3 times in a row is permitted?
+
+
+
+
+29. How do you extend the preceding regex to disallow leading 0s?
+
+
+
+
+30. How do you indicate that ’foo’ or ’bar’ is acceptable?
+
+
+
+
+31. How do you indicate that ’foo’ must be immediately followed by ’bar’?
+
+
+
+
+32. How do you indicate that ’foo’ must not be immediately followed by ’bar’?
+
+
+
+
+33. How do you indicate that ’bar’ must be immediately preceded by ’foo’?
+
+
+
+
+34. How do you indicate that ’bar’ must not be immediately preceded by ’foo’?
+
+
+
+
+35. How do you identify individual words?
+
+
+
+
+36. Craft a regex to match any time in the 24 hour HH:MM format.
+
+
+
+
+37. Extend the preceding regex to extract the hour and minute components.
+
+
+
+
+38. Craft a regex to match dates in the DD/MM/YYYY format; day and month may have 1 or 2
+characters (e.g., ’1’ and ’01’ are valid days).
+
+
+
+
+39. Consider the XML snippet "<node>abd 123</node>". Craft a regular expression that will
+return 2 matches: "<node>", "</node>".
+
+
+
+
+40. Suppose that you’ve defined variables below that are referenced throughout your scripts.
+You need to refactor them s.t. the prefix and suffice are swapped; e.g., prop1_obj becomes
+obj_prop1. How would you use a regular expression to do this in Gedit (the default text editor
+in our VMs)?
+
+	prop1_obj
+	prop2_obj
+	prop3_obj
