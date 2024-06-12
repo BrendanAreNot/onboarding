@@ -1,0 +1,94 @@
+1. Learn about CSV files.
+
+a. What is a CSV file?
+
+A CSV file is a text file used for storing data. One of its biggest strengths is its ability to transfer tabular data easily between proprietary programs and formats. Most programs can export or import data to or from CSV files. Not all CSV (Comma-separated values) files are actually separated by commas. Depending on location, other characters can be used as delimiters.
+
+An example CSV file may look like:
+
+last_name, first_name, age, gender
+Smith, Joe, 49, M
+Marie, Ann, 32, F
+Arndt, Brendan, 21, M
+
+In this example, the first row contains the column names (last_name, first_name..) and the following rows contain the data. The first entry describes Joe Smith, a 49 year old man.
+
+
+b. How is CSV written? What are its syntax rules?
+
+CSV is unique in the sense that there are no official rules for CSV format and syntax. A proposed set of rules, the RFC 4180, attempts to remedy this. However, these recommendations are not always used. Most programs will allow users the option to preview the CSV file and check delimiters, quotes, and other rules themselves.
+
+Some RFC 4180 specifications include:
+	- Each entry should have its own line, denoted by a line break
+		- The last entry in a list may or may not have a line break
+	- The first line may be a header that establishes column names for the entries that follow
+	- Spaces should be included in each field ("  44" is not the same as "44")
+	- Each line should have the same number of fields (keep the data rectangular)
+	- Fields may be enclosed in double quotes
+		- Fields that contain quotes, line breaks, or commas should be contained in double quotes
+		- If the field is not contained in quotes, the field cannot contain quotes
+		- If double quotes are used to encase a field that itself has a double quote, that interior quote must be escaped using another quote (wor"ds --> "wor""ds")
+
+c. How is an entry with a new line encoded?
+
+Double quotes can be used to 'contain' the new line (by land and(CRLF)by sea --> "by land and(CRLF)by sea")
+
+
+d. How is an entry containing the delimiter encoded?
+
+The delimiter can also be contained with double quotes. (hop, skip, jump --> "hop, skip, jump")
+
+
+e. In a comma-delimited file, how is an entry containing commas and double quotes en-
+coded?
+
+Because the entry contains commas, it is surrounded by double quotes.
+Because the entry is surrounded by double quotes and contains a double quote, another quote must be used to escape the one within the entry. (run,"jump --> "run,""jump")
+
+
+f. What is the expected behavior when an entry begins with a number of spaces, then a
+quote? A tab followed by a quote?
+
+Since the spaces/tab occur before the quotation marks, they would not be interpreted as data. Were they inside the quotation marks, I would try to include that information. It is worth noting that having spaces after a delimitter but before a double quotation mark can cause problems for some parsers. As I was experimenting, it seemed like the entries that had spaces before the double quotes were being lost entirely. If spaces are to stay, then they should be within the double quotes.
+
+
+g. Can you find other corner cases that might confuse the data parser?
+
+The examples above seem to persist independent of what character comes before the double quote. Spaces, letters, numbers, double quotes, hypens, and tabs seem to cause this problem. Any character in front of a double quote seems to overwrite or take precedent over whatever is in the double quotes.
+
+
+2. Using LibreOffice Calc (an Excel alternative that we use), test the claims and suggestions
+laid out above and answer the following questions.
+
+a. How do you open a CSV file in LibreOffice Calc and import the content as text?
+
+File, Import, <csv file>, Ok
+
+
+b. How do you specify UTF-8 encoding when opening a CSV file in LibreOffice Calc?
+
+After selecting the file to import, you can chose Unicode UTF-8 from the "Character set" dropdown
+
+
+c. How do you change the separator, quote character, etc. in LibreOffice Calc s.t. you can
+properly load comma-, tab-, and pipe-delimited data into LibreOffice Calc?
+
+When importing a csv file, you can select the delimitter. Options include, comma, tab, semicolon, as well as an Other column where custom delimitters can be entered.
+
+
+d. How do you disable/enable auto-formatting in LibreOffice Calc? Are there any auto-
+formatting that are safe to keep enabled when previewing a client’s CSV data via Libre-
+Office Calc?
+
+
+e. What’s the effect when entering numeric data prefixed with a single quote directly into
+a spreadsheet?
+
+
+f. What happens when loading numeric data with a single quote prefix in a CSV file into
+LibreOffice Calc using Text formating? Standard formatting?
+
+
+g. What happens when loading entries from a CSV file prefixed with an equal sign into
+LibreOffice Calc using Text formatting? Standard formatting?
+
