@@ -13,12 +13,10 @@ Git is a program designed to track changes and create a version history for text
 
 	c. What should a commit message convey? How should it be structured?
 
-A commit message should explain what the commit will do. The first line should be a short summary of what will be changed. Following the summary, use a blank line and then provide additional detail as to what was changed and why. Explain what effect the change will have and why you decided to make it. Additionally, commit messages are usually phrased in the present (Add File.txt not Added File.txt).
+A commit message should explain what the commit will do. The first line should be a short summary of what will be changed. Additionally, commit messages are usually phrased in the present (Add File.txt not Added File.txt).
 
 For example:
-"Fix errors with compiling
-
-In order to ensure that..."
+"Fix typo"
 
 
 	d. When should you commit? What should you commit? When should you push?
