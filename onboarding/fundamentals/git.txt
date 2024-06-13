@@ -2,7 +2,7 @@
 
 	a. What is Git? What is a repository?
 
-Git is a program designed to track changes and create a version history for text files. It is known as a Distributed Version Control System since each developer can copy the project to their machine. A repository contains all of a project's files as well as version history. It works like a collaborative folder
+Git is a program designed to track changes and create a version history for text files. It is known as a Distributed Version Control System since each developer can copy the project to their machine. A repository contains all of a project's files as well as version history. It works like a collaborative folder.
 
 
 	b. How do you persist changes you make locally in the repository? How do you sync them
@@ -13,7 +13,7 @@ Git is a program designed to track changes and create a version history for text
 
 	c. What should a commit message convey? How should it be structured?
 
-A commit message should explain what the commit will do. The first line should be a short summary of what will be changed. Following the summary, use a blank line and then provide additional detail as to what was changed and why. Explain what effect the change will have and why you decided to make it.
+A commit message should explain what the commit will do. The first line should be a short summary of what will be changed. Following the summary, use a blank line and then provide additional detail as to what was changed and why. Explain what effect the change will have and why you decided to make it. Additionally, commit messages are usually phrased in the present (Add File.txt not Added File.txt).
 
 For example:
 "Fix errors with compiling
@@ -23,18 +23,18 @@ In order to ensure that..."
 
 	d. When should you commit? What should you commit? When should you push?
 
-You should commit changes frequently whenever something has been added or changed. Multiple small commits are better than one big commit because then you can troubleshoot easier. Only push when a larger change has been made. NEVER push incomplete or potentially unsafe/damaging code. Commit - more the merrier (like ctrl+s) Push - thoughtfully and carefully
+You should commit changes frequently whenever something has been added or changed. Multiple small commits are better than one big commit because then you can troubleshoot more easily. Only push when a larger change has been made. NEVER push incomplete or potentially unsafe/damaging code. Commit - more the merrier (like ctrl+s) Push - thoughtfully and carefully
 
 
 	e. If you’ve accidentally added a file to the index that does not belong in the next commit,
 	what do you do?
 
-The "git reset <filename>" command can remove a file that has been added to the index using "git add"
+The "git reset <filename>" command can remove a file that has been added to the index using "git add". Eclipse has a red minus button that can be used to remove a staged change from the staging area.
 
 
 	f. How do you view a repository’s history?
 
-"git log" can be used to view the project's history and "git log -p" can be used to see the complete diffs throughout
+"git log" can be used to view the project's history and "git log -p" can be used to see the complete diffs throughout. Eclipse also has a History feature that can be used to view a timeline of commits.
 
 
 	g. How do you check if your local repository is clean? How do you know if its up to date?
@@ -47,20 +47,20 @@ The "git reset <filename>" command can remove a file that has been added to the 
 	local copy? With which types of files do these version control tools work? With which
 	types of files do they not work?
 
-"git pull" can be used to update a local branch to match the remote server by following the changes made to the remote server since the local branch was first pulled. It's important to not have any uncomitted changes before using git pull since it can cause problems with the new updates. Make sure the local version is working before pulling the newest version. "git difftool <hash>" can be used to show the differences made between the given hash and the current version. This will only work with text files, images and excel sheets are not viable for version control. Git cannot tell what specifically has changed with these types of files, only that they are different. TRY TO KEEP IMAGES AND EXCEL SHEETS OUT OF THE REPOSITORY!
+"git pull" can be used to update a local branch to match the remote server by following the changes made to the remote server since the local branch was first pulled. It's important to not have any uncomitted changes before using git pull since it can cause problems with the new updates. Make sure the local version is working before pulling the newest version. "git difftool <hash>" can be used to show the differences made between the given hash and the current version. This will only work with text files, images and excel sheets are not viable for version control. Git cannot tell what specifically has changed with these types of files, only that they are different. They are considered binary files. TRY TO KEEP IMAGES AND EXCEL SHEETS OUT OF THE REPOSITORY!
 
 
 	i. Suppose you’ve created a new project in path/to/my-project/. You now need to track it
 	with Git and connect it to Gitlab. How would you do this?
 
-First, GitBash/Eclipse needs to be linked to GitHub. After navigating to the local project folder, use "git init" to create a repository for that project. Use "git remote add origin <link to remote repo>" to connect the local repository to the GitHub repo. Then, use "git add ." to add all of the files and those before it to the index. Then, use "git commit" and "git push origin <branch>" to commit and push them to the remote repository.
+First, GitBash/Eclipse needs to be linked to GitHub. After navigating to the local project folder, use "git init" to create a repository for that project. Use "git remote add origin <link to remote repo>" to connect the local repository to the GitHub repo. Then, use "git add ." to add all of the files and those before it to the index. Then, use "git commit" and "git push origin <branch>" to commit and push them to the remote repository. Eclipse can also clone a repository using the repo's URL.
 
 
 	j. Suppose you’ve been working on the existing my-repo/file.txt, but realize you’ve made
 	poor decisions. You decide to rip out your changes and start over. How would you do
 	this?
 
-Error made before Commit, before Push. "git restore <filename>" can be used to restore a file to its most recent unmodified state. In this example, "git restore file.txt" would fix the mistake, provided there have not been any commits.
+Error made before Commit, before Push. "git restore <filename>" can be used to restore a file to its most recent unmodified state. In this example, "git restore file.txt" would fix the mistake, provided there have not been any commits. Files with unstaged changes can be reverted to the head version using Eclipse.
 
 
 	k. Suppose you’ve committed many changes to your local copy of my-repo and realize
