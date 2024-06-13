@@ -2,27 +2,28 @@
 
 1. What is a regular expression?
 
-
+A regular expression, or regex, is a series of symbols and shorthands used to describe a pattern in text. Text can then be searched using these patterns and matching (or non-matching) text can be returned.
 
 
 2. What are common use cases for regular expressions?
 
-
+Regular expressions are commonly used to search through text quickly and efficiently. For example, a regex could be used to find all cases of a phone number or an email. A single regex search can outperform a plan text search by five times.
 
 
 3. When should you (not) use regular expressions?
 
-
+Regular expressions are a powerful tool that can be used often. Being able to pull information and patterns from text is very useful. However, regular expressions aren't efficient with all types of text. Writing regex for HTML or XML is very difficult and inefficient. Other tools are available for those formats specifically. Additionally, certain tasks can be done more effectively with simple tools rather than a complex regex. Don't make things more difficult! Regular expres
 
 
 4. What is a greedy quantifer?
 
-
+A greedy quantifier, like the +, is a quantifier that encourages the regex engine to repeat something as often as possible. This means that the feature or request will repeat for as long as it can before the engine looks at the next token. In the example provided by Regular-Expressions.info, the regex <.+> will check for the starting character < then check for any character after until it reaches the end of the string. Once there, the regex will try to match the ending > token. When the token cannot be matched, the regex engine will backtrack, slowly taking off iterations until the > token can be matched. Once the token is matched, the regex engine stops. What this means is that a greedy quantifier can involve a lot of backtracking. In addition, it can also give unexpected answers. The example string "This is a <EM>first</EM> test" paired with the regex <.+> was supposed to match <EM> and </EM>. However, the greedy quantifier encountered the second > as it was backtracking. Therefore the output was <EM>first</EM>, which was unintended.
+Curly braces and the star are also considered greedy.
 
 
 5. What is a non-greedy (lazy) quantifier?
 
-
+A lazy quantifier uses the ? to make a greedy quantifier an "ungreedy" or "reluctant" quantifier. Instead of running amok, reaching the end, and working backwards to fix the mistake, the lazy quantifier goes slower. The regex <.+?> will check for a < and then check for any single character after that. Unlike the greedy quantifier, the lazy quantifier will then check the next token, >, and see if it matches the next character. If it doesn't, the lazy quantifier backtracks in order to expand the reach of the .+ component. It will try again and search for any two characters. This process of checking, backtracking, adding, and checking again repeats until the > is found. In this case, the lazy quantifier has given the expected result of <EM> and </EM>
 
 
 6. What is the behavior of a non-greedy quantifier?
