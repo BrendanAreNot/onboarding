@@ -23,57 +23,64 @@ Curly braces and the star are also considered greedy.
 
 5. What is a non-greedy (lazy) quantifier?
 
-A lazy quantifier uses the ? to make a greedy quantifier an "ungreedy" or "reluctant" quantifier. Instead of running amok, reaching the end, and working backwards to fix the mistake, the lazy quantifier goes slower. The regex <.+?> will check for a < and then check for any single character after that. Unlike the greedy quantifier, the lazy quantifier will then check the next token, >, and see if it matches the next character. If it doesn't, the lazy quantifier backtracks in order to expand the reach of the .+ component. It will try again and search for any two characters. This process of checking, backtracking, adding, and checking again repeats until the > is found. In this case, the lazy quantifier has given the expected result of <EM> and </EM>
+A lazy quantifier uses the ? to make a greedy quantifier an "ungreedy" or "reluctant" quantifier. Instead of running amok, reaching the end, and working backward to fix the mistake, the lazy quantifier goes slower. 
 
 
 6. What is the behavior of a non-greedy quantifier?
 
-
+The regex <.+?> will check for a < and then check for any single character after that. Unlike the greedy quantifier, the lazy quantifier will then check the next token, >, and see if it matches the next character. If it doesn't, the lazy quantifier backtracks in order to expand the reach of the .+ component. It will try again and search for any two characters. This process of checking, backtracking, adding, and checking again repeats until the > is found. In this case, the lazy quantifier has given the expected result of <EM> and </EM>
 
 
 7. What is a character class?
 
-
+A character class (also known as a character set) is a group of characters that the regex engine can match. For example, in the regex "gr[ae]y", the block [ae] is the character class. This regex expression would therefore match "grey" or "gray" since the character class contains both. The character class will only match one instance of the character, so neither "graey" nor "greey" would match. Character classes can be negated as well. gr[^ae]y would match "griy", "grby", and anything without a or e in the third slot.
 
 
 8. What shorthand character classes are typically available?
 
-
+Commonly available shorthand character classes include \d, \w, and \s. \d serves as a wild card for any digit (0-9). Within the character class [\d] all digits are added to the character class. \w expands this to include all letters as well as numbers (a-z, A-Z, and 0-9). \s refers strictly to whitespace, not characters. Each of these character classes can be capitalized (\D, \W, \S) to invert their effects. \D will look for all non-digit characters. \W will look for all non-word (letter or number) characters. \S will look for non-whitespace characters.
 
 
 9. What is a group?
 
+A group is a set of characters within parenthesis that can be called upon later in the regex. For example (ABC){3} would match ABCABCABC since it is the group ABC repeated 3 times. The pipe operator | can be used within as an OR statement. (ABC|DEF) would look for the group ABC or DEF, but not both. Using a (?:ABC){3} would prevent the group from being formed for future operations, but it would still allow ABCABCABC to match. This allows the regex to be shorted and the group to repeat without capturing the group. Captured groups can be referenced again using \# where # is the number of the captured group. (ABC)=\1 would search for the group ABC, =, and the group ABC once more.
 
 
+10. What is a positive lookahead?
 
-10. What is a postitive lookahead?
-
-
+Positive lookahead, regex1(?=regex2), is a query that ensures that every regex1 is followed by a regex2. For this example, we can use t(?=h). This regex would look for t's that are followed by h's. For example, the "t" in "there" would be marked but not the "t" in "tree". It's important to note that the regex only focuses on the t's and will only reference the t's. 
 
 
 11. What is a negative lookahead?
 
-
+Negative lookahead is the inverse of positive lookahead and uses regex1(?!regex2). It ensures that the selected regex1 is NOT followed by regex2. Reworking the t(?!h) regex from earlier would highlight t's that are not followed by h's. This time, the "t" in "tree" would be counted, but the "t" in "there" would not.
 
 
 12. What is a postive lookbehind?
 
-
+Positive lookbehind, (?<=regex1)regex2 functions like lookahead but refers to the previous character rather than the next. For example, (?<=s)h will match h's that are preceded by s's. It would mark the h in "cash" but not the h in "house" or "mulch".
 
 
 13. What is a negative lookbehind?
 
-
+Negative lookbehind, (?<!regex1)regex2 is the inverse of positive lookbehind. It looks for characters that are preceded by NOT the targeted character. Reworking the previous example to (?<!s)h would mark all h's not preceded by s's. It would mark the h's in "march" and "charm" but not in "cash".
 
 
 14. What is a back reference?
 
-
+A back reference occurs when a group selected with () is called upon again using \# where the # is the number of the group. For example, (ABC)=\1 uses \1 to back reference the first group, ABC.
 
 
 15. What are common flags? How do you specify them?
 
-
+Flags are modifiers that alter the way the regex engine searches through text. There are 6 in javascript:
+i - Ignore Casing - makes the expression search case-insensitively
+g - Global - makes the expression search for all occurrences
+s - Dot All - allows the wild character (.) to match newlines as well
+m - Multiline - makes the boundary characters ^ and $ match whole lines as opposed to strings
+y - Sticky - causes the expression to search from the index located in the lastIndex property
+u - Unicode - makes the expression assume characters as code prints not code units allowing it to match 32-bit characters too
+Flags can be used by implementing them after the pattern /pattern/flags when done literally or using RegExp('pattern', 'flags'). The order of the flags does not matter.
 
 
 16. What is the common regular expression syntax?
@@ -83,58 +90,87 @@ A lazy quantifier uses the ? to make a greedy quantifier an "ungreedy" or "reluc
 
 17. How do you identify the start and end of a line?
 
-
+The start of a line can be found using ^ and the end of a line can be found using $. The Multiline flag (m) must be enabled, however, as ^ and $ usually refer to strings
 
 
 18. How do you specify a regex as case-insensitive?
 
-
+The Ignore Casing flag (i) must be used. 
 
 
 19. How do you indicate that a character must occur:
+
 a. 0 or more times?
+The * character
+
 b. 1 or more times?
+The + character
+
 c. 0 or 1 times?
+The ? character
+
 d. n (> 0) times?
+{n}
+
 e. n (> 0) or more times?
+{n,}
+
 f. at least n (> 0) but no more than m (> n) times?
+{n,m}
+
 g. no more than m (> 0) times?
-
-
+{,n}
 
 
 20. How do you refer to the collection of:
+
 a. Alpha characters?
+[a-zA-Z]
+
 b. Non-alpha characters?
+[^a-zA-Z]
+
 c. Digits?
+\d or [0-9]
+
 d. Non-digits?
+\D or [^0-9]
+
 e. Alphanumeric characters?
+\w or [0-9a-zA-Z]
+
 f. Non-alphanumeric characters?
+\W or [^0-9a-zA-Z]
+
 g. White space characters?
+\s [ ]
+
 h. Non-white space characters?
+\S [^ ]
+
 Are there multiple approaches to the above questions? If so, what are they?
 
-
+Many of the above questions can use character classes or shorthand character classes to meet the requirements
 
 
 21. How do you indicate that any character is acceptable?
 
-
+The wildcard character "." can be used to represent any character other than a new line
 
 
 22. How do you indicate that a ’?’ is acceptable?
 
-
+The "?" can either be encased in [] or it can be escaped using \
 
 
 23. How do you indicate that a ’[’ is acceptable?
 
-
+Escape the "[" using \
 
 
 24. How do you indicate that ’\’ and ’w’ are acceptable?
 
-
+Put the w and \ in brackets. Be sure to escape the \. [\\w]
 
 
 25. How do you account for a newline character between words?
@@ -144,62 +180,62 @@ Are there multiple approaches to the above questions? If so, what are they?
 
 26. How do you indicate that any alpha character not ’a’, ’b’, or ’c’ is permitted?
 
-
+[^a-c0-9 ]
 
 
 27. How do you indicate that any word character not ’a’, ’b’, or ’c’ is permitted?
 
+[^a-c ]
 
 
+	28. How do you indicate that any 10 digit ID without a digit occurring 3 times in a row is permitted?
 
-28. How do you indicate that any 10 digit ID without a digit occurring 3 times in a row is permitted?
+^\d{10}$
+(\d)\1{3,}
 
-
-
-
-29. How do you extend the preceding regex to disallow leading 0s?
+	29. How do you extend the preceding regex to disallow leading 0s?
 
 
 
 
 30. How do you indicate that ’foo’ or ’bar’ is acceptable?
 
-
+(foo|bar)
 
 
 31. How do you indicate that ’foo’ must be immediately followed by ’bar’?
 
-
+foo(?=bar)
 
 
 32. How do you indicate that ’foo’ must not be immediately followed by ’bar’?
 
-
+foo(?!bar)
 
 
 33. How do you indicate that ’bar’ must be immediately preceded by ’foo’?
 
-
+(?<=foo)bar
 
 
 34. How do you indicate that ’bar’ must not be immediately preceded by ’foo’?
 
-
+(?!=foo)bar
 
 
 35. How do you identify individual words?
 
-
+Word boundaries \b can be used to identify the starts and ends of words
 
 
 36. Craft a regex to match any time in the 24 hour HH:MM format.
 
-
+([0-1][0-9]|2[0-4]):([0-5][0-9])
 
 
 37. Extend the preceding regex to extract the hour and minute components.
 
-
+([0-1][0-9]|2[0-4]):([0-5][0-9])
 
 
 38. Craft a regex to match dates in the DD/MM/YYYY format; day and month may have 1 or 2
