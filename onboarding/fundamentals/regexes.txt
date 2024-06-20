@@ -254,18 +254,20 @@ Word boundaries \b can be used to identify the starts and ends of words
 
 36. Craft a regex to match any time in the 24 hour HH:MM format.
 
-^([0-1][0-9]|2[0-4]):([0-5][0-9])$
+\b([0-1][\d]|2[0-4]):([0-5][\d])\b
 
 
 37. Extend the preceding regex to extract the hour and minute components.
 
-&([0-1][0-9]|2[0-4]):([0-5][0-9])$
+\b([0-1][\d]|2[0-4]):([0-5][\d])\b
 
 
 38. Craft a regex to match dates in the DD/MM/YYYY format; day and month may have 1 or 2
 characters (e.g., ’1’ and ’01’ are valid days).
 
-^(0[1-9]|[12][\d]|3[0-1])/(0[1-9]|1[12])/([\d]{4})$
+\b(0?[1-9]|[12][\d]|3[0-1])/(0?[1-9]|1[12])/(?!0)([\d]{1,})\b
+This regex allows for years of any length, provided they are at least 1 (since there is no year 0) Changing the {1,} to {1,4} would cap the year at 4 digits whereas setting it to {4} would only allow 4 digit years
+
 
 
 39. Consider the XML snippet "<node>abd 123</node>". Craft a regular expression that will
