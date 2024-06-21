@@ -23,7 +23,7 @@ Curly braces {} and the star * are also considered greedy.
 
 5. What is a non-greedy (lazy) quantifier?
 
-A lazy quantifier uses the ? to make a greedy quantifier an "ungreedy" or "reluctant" quantifier. Instead of running amok, reaching the end, and working backward to fix the mistake, the lazy quantifier goes slower. 
+A lazy quantifier uses the ? to make a greedy quantifier an "ungreedy" or "reluctant" quantifier. Instead of running amok, reaching the end, and working backward to fix the mistake, the lazy quantifier checks the following token after every iteration and adds on if necessary. 
 
 
 6. What is the behavior of a non-greedy quantifier?
@@ -254,12 +254,12 @@ Word boundaries \b can be used to identify the starts and ends of words
 
 36. Craft a regex to match any time in the 24 hour HH:MM format.
 
-\b([0-1][\d]|2[0-4]):([0-5][\d])\b
+\b([0-1]\d|2[0-4]):[0-5]\d\b
 
 
 37. Extend the preceding regex to extract the hour and minute components.
 
-\b([0-1][\d]|2[0-4]):([0-5][\d])\b
+\b(?([0-1]\d)|(2[0-4])):([0-5]\d)\b
 
 
 38. Craft a regex to match dates in the DD/MM/YYYY format; day and month may have 1 or 2
@@ -273,7 +273,7 @@ This regex allows for years of any length, provided they are at least 1 (since t
 39. Consider the XML snippet "<node>abd 123</node>". Craft a regular expression that will
 return 2 matches: "<node>", "</node>".
 
-</?\w+>
+</?[\w_-]+>
 
 
 40. Suppose that you’ve defined variables below that are referenced throughout your scripts.
