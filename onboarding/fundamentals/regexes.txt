@@ -159,25 +159,25 @@ d. Non-digits?
 \D or [^0-9]
 
 e. Alphanumeric characters?
-\w or [0-9a-zA-Z] or \S or [^ \n\t\r]
+[0-9a-zA-Z]
 
 f. Non-alphanumeric characters?
-\W or [^0-9a-zA-Z] or \s or [ \n\t\r]
+[^0-9a-zA-Z]
 
 g. White space characters?
-\s or [ \n\t\r] or \W or [^0-9a-zA-Z]
+\s or [ \n\t\r]
 
 h. Non-white space characters?
-\S or [^ \n\t\r] or \w or [0-9a-zA-Z]
+\S or [^ \n\t\r]
 
 Are there multiple approaches to the above questions? If so, what are they?
 
-Many of the above questions can use character classes or shorthand character classes to meet the requirements. Some character classes, like \w and \s are opposites, so their inverted version can technically be used. \W (non-alphanumeric characters) only leaves whitespace, which can be selected by \s, for example.
+Many of the above questions can use character classes or shorthand character classes to meet the requirements. \s or [ \n\t\r] could be used
 
 
 21. How do you indicate that any character is acceptable?
 
-The wildcard character "." can be used to represent any character other than a new line. Using the s (Dot All) flag can let the wildcard match newlines.
+The wildcard character "." can represent any character other than a new line. Using the s (Dot All) flag can let the wildcard match newlines. [\s\S], [\d\D], and [\w\W] would also work, as each of these shorthands combined would include every character.
 
 
 22. How do you indicate that a ’?’ is acceptable?
@@ -187,7 +187,7 @@ The "?" can either be encased in [] or it can be escaped using \
 
 23. How do you indicate that a ’[’ is acceptable?
 
-Escape the "[" using \ or encase it in []
+Escape the "[" using \. Some flavors allow you to encase the bracket within brackets [[]. Java does not.
 \[
 
 
@@ -209,7 +209,7 @@ Put the w and \ in brackets. Be sure to escape the \.
 
 27. How do you indicate that any word character not ’a’, ’b’, or ’c’ is permitted?
 
-[a-zA-Z0-9&&[^abc]]
+[a-zA-Z0-9_&&[^abc]]
 
 
 28. How do you indicate that any 10 digit ID without a digit occurring 3 times in a row is permitted?
@@ -224,27 +224,27 @@ Put the w and \ in brackets. Be sure to escape the \.
 
 30. How do you indicate that ’foo’ or ’bar’ is acceptable?
 
-(foo|bar)
+Alternation using the pipe operator | (foo|bar)
 
 
 31. How do you indicate that ’foo’ must be immediately followed by ’bar’?
 
-foo(?=bar)
+Positive Lookahead foo(?=bar)
 
 
 32. How do you indicate that ’foo’ must not be immediately followed by ’bar’?
 
-foo(?!bar)
+Negative Lookahead foo(?!bar)
 
 
 33. How do you indicate that ’bar’ must be immediately preceded by ’foo’?
 
-(?<=foo)bar
+Positive Lookbehind (?<=foo)bar
 
 
 34. How do you indicate that ’bar’ must not be immediately preceded by ’foo’?
 
-(?!=foo)bar
+Negative Lookbehind (?!=foo)bar
 
 
 35. How do you identify individual words?
@@ -259,15 +259,13 @@ Word boundaries \b can be used to identify the starts and ends of words
 
 37. Extend the preceding regex to extract the hour and minute components.
 
-\b(?([0-1]\d)|(2[0-4])):([0-5]\d)\b
+\b(([0-1]\d)|(2[0-4])):([0-5]\d)\b
 
 
 38. Craft a regex to match dates in the DD/MM/YYYY format; day and month may have 1 or 2
 characters (e.g., ’1’ and ’01’ are valid days).
 
-\b(0?[1-9]|[12][\d]|3[0-1])/(0?[1-9]|1[12])/(?!0)([\d]{1,})\b
-This regex allows for years of any length, provided they are at least 1 (since there is no year 0) Changing the {1,} to {1,4} would cap the year at 4 digits whereas setting it to {4} would only allow 4 digit years
-
+\b(0?[1-9]|[12]\d|3[0-1])/(0?[1-9]|1[12])/(\d{4})\b
 
 
 39. Consider the XML snippet "<node>abd 123</node>". Craft a regular expression that will
