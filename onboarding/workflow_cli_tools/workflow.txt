@@ -1,1 +1,103 @@
-Placeholder text.
+2.1.2 - Artifacts Exercises
+
+1. Compare and contrast how we use snapshot and release versions of artifacts in the daily
+workflow.
+
+
+
+
+2. Identify the classifiers and file types for the artifacts found in the following snapshot directory:
+s3://com.esc.data/snapshot/com/esc/data/tulsa-2014/2.3.0-SNAPSHOT/
+
+
+
+
+3. Find the corresponding release directory for the snapshot in the previous question.
+
+
+
+
+4. Copy the .pom file for the 2.3.0 release version of the Tulsa 2014 project to your local direc-
+tory. Name the group ID, artifact ID, and version number for the dependencies listed. Find
+the line numbers on which the classifiers and types for the artifacts are declared. Then,
+write a summary of your findings (i.e., what does it mean for these artifacts to be listed as
+dependencies?).
+
+
+
+
+5. Copy the latest ESCalate documentation file. This will be a great reference to have as you
+complete more onboarding tasks. Find the latest version in:
+s3://com.esc.artifacts/release/com/esc/doc/escalate/
+Copy the pdf to your local repo. There are .zip files you can download as well, but the pdf is
+easier to search.
+
+
+
+2.1.3 - Semantic Versioning Exercises
+
+1. Identify the parts of a semantic version. What does each part mean?
+
+
+
+
+2. Consider the development of the following JavaScript function amazing:
+
+function amazing(){
+return "Awsome";
+}
+
+Call this version 1.0.0.
+
+
+
+
+a. Suppose we recognize that we made a mistake in the original function and corrected it
+as follows:
+
+function amazing(){
+return "Awesome";
+}
+
+What should this new version be called?
+
+
+
+
+b. Suppose we next make the following change:
+
+function amazing(language){
+if(language == null)
+throw new Error("Language argument must be provided.");
+return language === "fr" ? "Génial":"Awesome";
+}
+
+What should this version now be called?
+
+
+
+
+c. Suppose we next make the following change:
+function amazing(language){
+if(language == null)
+throw new Error("Language argument must be provided.");
+return language === "fr" ? "Génial" : language === "de" : "Spitze" : "Awsome";
+}
+
+What should this version now be called?
+
+
+
+
+d. Suppose we next make the following change:
+
+function amazing(language){
+if(language == null)
+throw new Error("Language argument must be provided.");
+return language === "fr" ? "Génial" : language === "de" : "Spitze" : "Awesome";
+}
+
+What should this version now be called?
+
+
+
