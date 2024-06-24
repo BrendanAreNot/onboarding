@@ -1,4 +1,5 @@
-1.3.2 Exercises
+1.3 - XML Exercises
+
 1. Is the example below a ’well formed’ XML document? If not, make the corrections needed.
 
 OLD:
