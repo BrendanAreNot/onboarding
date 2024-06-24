@@ -1,3 +1,5 @@
+2.1 - Workflow Exercises
+
 2.1.2 - Artifacts Exercises
 
 1. Compare and contrast how we use snapshot and release versions of artifacts in the daily
