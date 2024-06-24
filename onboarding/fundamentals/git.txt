@@ -1,3 +1,5 @@
+1.2 - Git Exercises
+
 1. Learn about Git.
 
 	a. What is Git? What is a repository?
