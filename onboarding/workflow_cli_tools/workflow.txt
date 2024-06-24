@@ -40,7 +40,19 @@ easier to search.
 
 1. Identify the parts of a semantic version. What does each part mean?
 
+Semantic versioning uses the following format: MAJOR.MINOR.PATCH-(pre-release)+(metadata) [1.0.0-alpha+001 as an example]
 
+MAJOR (X.0.0) changes are made whenever an update would be incompatible with older versions or changes. For example, if a program that only performed the "add" function had changes made to how it outputs or inputs information, that would constitute a Major version update since other programs that rely on those inputs/outputs would be incompatible.
+
+MINOR (0.X.0) changes are made whenever new features are added in a backward-compatible manner. Using the "add" program from the previous example, implementing a "subtract" feature would be a Minor update since it does not interfere with the functionality of the "add" feature. Changes that may seem major but implement some default value with a change can be considered Minor as well since they wouldn't break anything.
+
+PATCH (0.0.X) changes are made whenever backward-compatible bug fixes are made. Making changes to the "add" program to fix a bug would be a Patch. As long as it doesn't add functionality or break previous versions, it is a Patch.
+
+Pre-release and metadata components can be added to provide additional information (metadata) or let users know that certain functions may be incomplete (pre-release) but neither are mandatory.
+
+Whenever a MAJOR or MINOR update is made, lesser changes are reset to 0. For example: Version 3.4.8 receives a MAJOR update and becomes Version 4.0.0. Version 3.4.8 receives a MINOR update and becomes Version 3.5.0.
+Keep in mind that precedence is established from left to right (Major to Pre-release). When two versions are identical except for metadata, they have equal precedence.
+Therefore, 1.0.0-alpha+002 = 1.0.0-alpha+003 < 1.0.0-beta < 1.0.0 < 1.0.1 < 1.1.0 < 2.0.0
 
 
 2. Consider the development of the following JavaScript function amazing:
@@ -51,10 +63,7 @@ return "Awsome";
 
 Call this version 1.0.0.
 
-
-
-
-a. Suppose we recognize that we made a mistake in the original function and corrected it
+a. Suppose we recognize that we made a mistake in the original function and correct it
 as follows:
 
 function amazing(){
@@ -63,7 +72,7 @@ return "Awesome";
 
 What should this new version be called?
 
-
+Since a bug has been fixed and no features have been changed, a Patch has been implemented and the new version is 1.0.1
 
 
 b. Suppose we next make the following change:
@@ -76,7 +85,7 @@ return language === "fr" ? "Génial":"Awesome";
 
 What should this version now be called?
 
-
+Since this update includes changes to how the function is used by requiring a "language" argument without including a default, it breaks old versions. This means it is a Major change and the new version is 2.0.0
 
 
 c. Suppose we next make the following change:
@@ -88,7 +97,7 @@ return language === "fr" ? "Génial" : language === "de" : "Spitze" : "Awsome";
 
 What should this version now be called?
 
-
+Since this update adds a new language but does not change the pre-existing one, it is a Minor change. The new version is 2.1.0
 
 
 d. Suppose we next make the following change:
@@ -101,5 +110,4 @@ return language === "fr" ? "Génial" : language === "de" : "Spitze" : "Awesome";
 
 What should this version now be called?
 
-
-
+This change fixes a typo and changes "Awsome" to "Awesome". This is a bug fix or Patch and the new version is 2.1.1
