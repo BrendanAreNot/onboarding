@@ -51,7 +51,7 @@ Because the entry is surrounded by double quotes and contains a double quote, an
 f. What is the expected behavior when an entry begins with a number of spaces, then a
 quote? A tab followed by a quote?
 
-Since the spaces/tab occur before the quotation marks, they would not be interpreted as data. Were they inside the quotation marks, I would try to include that information. It is worth noting that having spaces after a delimitter but before a double quotation mark can cause problems for some parsers. As I was experimenting, it seemed like the entries that had spaces before the double quotes were being lost entirely. If spaces are to stay, then they should be within the double quotes.
+Since the spaces/tab occur before the quotation marks, they would not be interpreted as data. Were they inside the quotation marks, I would try to include that information. It is worth noting that having spaces after a delimitter but before a double quotation mark can cause problems for some parsers. As I was experimenting, it seemed like the entries that had spaces before the double quotes were being lost entirely. If spaces are to stay, then they should be within the double quotes. Ideally, [tab]"words" would become "[tab]""words""".
 
 
 g. Can you find other corner cases that might confuse the data parser?
