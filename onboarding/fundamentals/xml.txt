@@ -21,10 +21,10 @@ CHANGES MADE:
 	- Quotes added to the version number in the prolog
 	- Added a '?' to the end of the prolog
 
-In a 'well formed' XML document:
+In a 'well-formed' XML document:
 	- There must be a root element (in this case <message>)
 	- Elements need a closing tag (<body> needs </body>, for example)
-	- Tags must match (they're case sensative)
+	- Tags must match (they're case-sensitive)
 	- Elements must be properly nested (think about it like parentheses)
 		- <A><B><C>Text<C><B><A> is correct
 		- <A><B><C>Text<A><B><C> is incorrect
@@ -34,11 +34,11 @@ In a 'well formed' XML document:
 2. How can you get the XML parser to ignore a section of your XML file and treat it as a block
 of character data?
 
-The CDATA section can be used to treat everything within as textual, non-marked-up content.
+The CDATA section can treat everything within as textual, non-marked-up content.
 For example,
 	<![CDATA[Spinach < Ice Cream]]> is read as "Spinach < Ice Cream", despite "<" being a predefined entity
 	<![CDATA[<to>Candidate</to>]]> would be interpreted literally as "<to>Candidate</to>"
-	In <to>Candidate</to>, the 'to's are interpreted as markup and only "Candidte" remains
+	In <to>Candidate</to>, the 'to's are interpreted as markup and only "Candidate" remains
 
 
 3. What are the reserved characters in XML, and how can you escape them?
@@ -52,7 +52,6 @@ Reserved characters and their escape sequences include the following:
 	- " (quotation) - &quot;
 
 
-
 4. What is the correct syntax for declaring the version of an XML document?
 
 The correct syntax is <?xml version="1.0"?>
@@ -60,7 +59,7 @@ The correct syntax is <?xml version="1.0"?>
 
 5. How do you insert single-line comments into an XML document? Multi-line comments?
 
-Single line comments can be done using <!-- Comment goes here -->
+Single-line comments can be made using <!-- Comment goes here -->
 A Multi-line comment can be done in the same way, just over multiple lines
 <!-- 
 Comment
