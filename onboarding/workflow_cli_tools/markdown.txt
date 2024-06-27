@@ -1,0 +1,49 @@
+1. What methods are available that add emphasis to text? What are the conventions?
+
+Emphasis can be added as italics, bold, bold italics, or monospace font.
+*italics* or _italics_
+**bold** or __bold__
+***bold italics*** or ___bold italics___
+`monospace font`
+
+
+2. What is the longest any line should be in an ESCMarkdown file? How do you emphasize content that must be written over multiple lines?
+
+
+
+
+3. What are the available section delimiters? Which should be used per the conventions? If
+using atx notation as a section delimiter, how long should the delimiter be?
+
+
+
+
+4. What does it mean to (not) externalize a table?
+
+
+
+
+5. What are the conventions for adding list items? How should sublists be included?
+
+
+
+
+6. What must you write in ESCMarkdown to print ’$’?
+
+
+
+
+7. What is the syntax for inserting a block quote? What other block-like features are available?
+
+
+
+
+8. What document types are available? How do you specify which is used?
+
+
+
+
+9. Draft a simple memo demonstrating everything that you’ve learned about ESCMarkdown. It
+need not (and should not) simply be regurgitation of the documentation. Print it to both PDF
+and HTML using the escdocument tool. Copy your memo to the correct directory that will
+allow you to access it within your podman container and convert.
