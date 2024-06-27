@@ -64,33 +64,43 @@ laid out above and answer the following questions.
 
 a. How do you open a CSV file in LibreOffice Calc and import the content as text?
 
-File, Import, <csv file>, Ok
+File, Open, <file>, Format Quoted Field as Text, Ok
+OR
+File, Open, <file>, change the individual Column to Text, Ok
 
 
 b. How do you specify UTF-8 encoding when opening a CSV file in LibreOffice Calc?
 
-After selecting the file to import, you can chose Unicode UTF-8 from the "Character set" dropdown
+After selecting the file to import, you can choose Unicode UTF-8 from the "Character set" dropdown
 
 
 c. How do you change the separator, quote character, etc. in LibreOffice Calc s.t. you can
 properly load comma-, tab-, and pipe-delimited data into LibreOffice Calc?
 
-When importing a csv file, you can select the delimitter. Options include, comma, tab, semicolon, as well as an Other column where custom delimitters can be entered.
+When importing a CSV file, you can select the delimiter. Options include a comma, tab, semicolon, as well as an "Other" column where custom delimitters can be entered.
 
 
 d. How do you disable/enable auto-formatting in LibreOffice Calc? Are there any auto-
 formatting that are safe to keep enabled when previewing a client’s CSV data via Libre-
 Office Calc?
 
+AutoCorrect can have its features disabled individually under Tools, AutoCorrect Options, then deselecting all options under the Options and Localized Options tabs.
+Ideally, client CSV data is treated as text when imported so that leading 0s or decimals are not formatted by LibreOffice Calc.
+
 
 e. What’s the effect when entering numeric data prefixed with a single quote directly into
 a spreadsheet?
 
+Numerical data entered with a leading quote ('0100.00) maintains its formatting and is not changed automatically by LibreOffice Calc. Leading and trailing zeroes stay.
 
 f. What happens when loading numeric data with a single quote prefix in a CSV file into
-LibreOffice Calc using Text formating? Standard formatting?
+LibreOffice Calc using Text formatting? Standard formatting?
 
+With Standard formatting, the single quote preserves the leading and trailing zeroes and remains in the entry.
+With Text formatting, the single quote still preserves the leading and trailing zeroes and stays in the entry.
 
 g. What happens when loading entries from a CSV file prefixed with an equal sign into
 LibreOffice Calc using Text formatting? Standard formatting?
 
+With Standard formatting, the equals sign does not preserve the information, but the = stays in the entry (=04.400 -> =4.4)
+With Text formatting, the equals sign preserves the leading and trailing zeroes, and the = stays in the entry.
