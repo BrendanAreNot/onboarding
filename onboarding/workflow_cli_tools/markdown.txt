@@ -10,14 +10,13 @@ Monospace font and bold/italics can be combined as well.
 
 2. What is the longest any line should be in an ESCMarkdown file? How do you emphasize content that must be written over multiple lines?
 
-The longest any line can be in ESCMarkdown is 80. Content that must be written over multiple lines can be bolded or italicized from the start of the line to the end of the line. Anything seperated by a blank line will have to be emphasized in segments.
+The longest any line can be in ESCMarkdown is 80 characters. Content that must be written over multiple lines can be bolded or italicized from the start of the line to the end of the line. Anything separated by a blank line will have to be emphasized in segments.
 
 
 
-3. What are the available section delimiters? Which should be used per the conventions? If
-using atx notation as a section delimiter, how long should the delimiter be?
+3. What are the available section delimiters? Which should be used per the conventions? If using atx notation as a section delimiter, how long should the delimiter be?
 
-There are two types of notation for section delimiters, Setext and atx notation. Setext starts denotes sections using the # symbol. More #s means further nesting. atx notation uses ===, ---, or ... followed by a blank line to denote new sections.
+There are two types of notation for section delimiters, Setext and atx notation. Setext starts and denotes sections using the # symbol. More #s means further nesting. atx notation uses ===, ---, or ... followed by a blank line to denote new sections.
 
 For example:
 # Section 1
@@ -45,7 +44,7 @@ An externalized table is not printed within the document itself. It is printed t
 
 5. What are the conventions for adding list items? How should sublists be included?
 
-List items can be added using either a hyphen (-), an asterisk (*), or a plus (+) in the same style as bullet points for any other list. Using numbers followed by a period (1.) will start a numbered list. Numbered lists are automatically counted by the system, so the actual order of the numbers doesn't matter. Just the fact that it is a number followed by a period is enough. This makes it easy to add entries inbetween entries without having the re-number the list. Sublists can be created using indentation, just like Word. It is worth noting that two separate lists need to be split by two blank lines.
+List items can be added using either a hyphen (-), an asterisk (*), or a plus (+) in the same style as bullet points for any other list. Using numbers followed by a period (1.) will start a numbered list. The system automatically counts numbered lists, so the actual order of the numbers doesn't matter. Just the fact that it is a number followed by a period is enough. This makes it easy to add entries between entries without re-numbering the list. Sublists can be created using indentation, just like Word. It is worth noting that two separate lists need to be split by two blank lines.
 
 
 6. What must you write in ESCMarkdown to print ’$’?
@@ -66,7 +65,7 @@ Tables can also be considered a block-like feature since each entry is treated a
 
 8. What document types are available? How do you specify which is used?
 
-The three available document types are article, book, and memo(texMemo). Memos tend to be shorter than articles which are shorter than books. This is important for transcribers which may use different formating depending on the document type. The document type is specified by the characters surrounding the document's title, author and date. Articles surround the info in one line of equal signs (===). Books use two consecutive sets of equals signs and then an additional line at the bottom of the header. Memos use dashed lines (---).
+The three available document types are article, book, and memo(texMemo). Memos tend to be shorter than articles which are shorter than books. This is important for transcribers which may use different formatting depending on the document type. The document type is specified by the characters surrounding the document's title, author, and date. Articles surround the info in one line of equal signs (===). Books use two consecutive sets of equals signs and then an additional line at the bottom of the header. Memos use dashed lines (---).
 
 
 9. Draft a simple memo demonstrating everything that you’ve learned about ESCMarkdown. It
