@@ -1,0 +1,30 @@
+<div class="esc-toc">
+	<ul>
+		<li><a id="esc-toc--cover" href="#esc-cover">Title</a></li>
+		<li><a id="esc-toc--list-of-tables" href="#esc-list-of-tables">List of Tables</a></li>
+		<li><a id="esc-toc--list-of-figures" href="#esc-list-of-figures">List of Figures</a></li>
+		<li><a id="esc-toc--section-1" href="#esc-section-1">1 Fun Formatting Options</a></li>
+		<li><a id="esc-toc--section-2" href="#esc-section-2">2 Creating Figures and Tables?</a>
+			<ul>
+				<li><a id="esc-toc--section-2-1" href="#esc-section-2-1">2.1 Figures</a></li>
+				<li><a id="esc-toc--section-2-2" href="#esc-section-2-2">2.2 Tables</a></li>
+			</ul>
+		</li>
+		<li><a id="esc-toc--section-3" href="#esc-section-3">3 Mathematical Functions and Symbols</a></li>
+		<li><a id="esc-toc--section-4" href="#esc-section-4">4 Using Verbatim Text</a></li>
+		<li><a id="esc-toc--section-5" href="#esc-section-5">5 Numbered and Non-Numbered Lists</a></li>
+		<li><span>Appendices</span>
+			<li><a id="esc-toc--appendix-6" href="#esc-appendix-6">Appendix 6: Markdown Code for Figures</a>
+				<ul>
+					<li><a id="esc-toc--section-6-1" href="#esc-section-6-1">Figure 1</a></li>
+					<li><a id="esc-toc--section-6-2" href="#esc-section-6-2">Figure 2</a></li>
+				</ul>
+			</li>
+			<li><a id="esc-toc--appendix-7" href="#esc-appendix-7">Appendix 7: Markdown Code for Tables</a>
+				<ul>
+					<li><a id="esc-toc--section-7-1" href="#esc-section-7-1">Table 1</a></li>
+				</ul>
+			</li>
+		</li>
+	</ul>
+</div>

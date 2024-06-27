@@ -1,0 +1,3084 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="theme-color" content="#ffffff">
+	<meta charset="utf-8">
+	<script src="/static/web-standard/6.3/js/web-standard-en-US.min.js" defer="defer"></script>
+	<script src="/static/mathjax/3.1/tex-chtml.js" defer="defer"></script>
+	<script src="/static/web-standard/6.3/js/check-browser.min.js"></script>
+	<link rel="apple-touch-icon" sizes="180x180" href="/static/web-standard/6.3/css/assets/favicons/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/static/web-standard/6.3/css/assets/favicons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/static/web-standard/6.3/css/assets/favicons/favicon-16x16.png">
+	<link rel="manifest" href="/static/web-standard/6.3/css/assets/favicons/site.webmanifest">
+	<link rel="mask-icon" href="/static/web-standard/6.3/css/assets/favicons/safari-pinned-tab.svg" color="#3291ff">
+	<link rel="stylesheet" type="text/css" href="/static/web-standard/6.3/css/web-standard.min.css">
+	<style>
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		overflow-wrap: break-word;
+		word-wrap: break-word;
+		word-break: break-all;
+		word-break: break-word;
+		hyphens: auto;
+	}
+
+	h1 {
+		font-size: 2.75em;
+	}
+
+	h2 {
+		font-size: 2em;
+	}
+
+	h3 {
+		font-size: 1.25em;
+	}
+	</style>
+	<script>
+	(function() {
+		(function(exports) {
+			'use strict';
+			var Language;
+			(function(Language) {
+				Language["de"] = "de";
+				Language["en"] = "en";
+				Language["en_US"] = "en-US";
+				Language["en_GB"] = "en-GB";
+				Language["es"] = "es";
+				Language["es_419"] = "es-419";
+				Language["pt"] = "pt";
+				Language["pt_BR"] = "pt-BR";
+			})(Language || (Language = {}));
+
+			function enumValues(enumeration) {
+				return Object.keys(enumeration).map(k => enumeration[k]);
+			}
+
+			function toEnum(value, enumeration, defaultValue) {
+				if (enumeration == null) throw new Error('Enumeration must be non-null.');
+				if (value == null) return defaultValue;
+				let result;
+				if (typeof value === 'string' && (result = enumeration[value])) return result;
+				for (let key in enumeration) {
+					if (value === enumeration[key]) return value;
+				}
+				throw new Error(`Enum value '${value}' is invalid - permissible values are '${enumValues(enumeration).join("', '")}'.`);
+			}
+			let dictionary;
+
+			function setDictionary(value) {
+				dictionary = value;
+			}
+
+			function getDictionary() {
+				return dictionary;
+			}
+			class GenerativeMap extends Map {
+				constructor(options) {
+					super(options == null || typeof options === 'function' ? undefined : options.entries);
+					this.generator = (options == null || typeof options === 'function' ? options : options.generator) || null;
+					this.maxSize = options == null || typeof options === 'function' || options.maxSize == null ? -1 : options.maxSize;
+				}
+				compute(key) {
+					let v = this.get(key);
+					if (v !== undefined || !this.generator || this.has(key)) return v;
+					let w = this.generator(key);
+					if (w !== undefined) {
+						this.set(key, w);
+						if (this.maxSize >= 0 && this.size > this.maxSize) {
+							let key = this.keys().next().value;
+							this.delete(key);
+						}
+					}
+					return w;
+				}
+			}
+			var DateFormat;
+			(function(DateFormat) {
+				DateFormat["dayLong"] = "day-long";
+				DateFormat["dayShort"] = "day-short";
+				DateFormat["monthLong"] = "month-long";
+				DateFormat["monthShort"] = "month-short";
+				DateFormat["yearLong"] = "year-long";
+				DateFormat["yearShort"] = "year-short";
+				DateFormat["fiscalYearStartLong"] = "fiscal-year-start-long";
+				DateFormat["fiscalYearStartShort"] = "fiscal-year-start-short";
+				DateFormat["fiscalYearEndLong"] = "fiscal-year-end-long";
+				DateFormat["fiscalYearEndShort"] = "fiscal-year-end-short";
+				DateFormat["date"] = "date";
+				DateFormat["time"] = "time";
+				DateFormat["dateTime"] = "date-time";
+				DateFormat["timeNoSec"] = "time-nosec";
+				DateFormat["dateTimeNoSec"] = "date-time-nosec";
+				DateFormat["dateUtc"] = "date-utc";
+				DateFormat["timeUtc"] = "time-utc";
+				DateFormat["dateTimeUtc"] = "date-time-utc";
+				DateFormat["timeNoSecUtc"] = "time-nosec-utc";
+				DateFormat["dateTimeNoSecUtc"] = "date-time-nosec-utc";
+				DateFormat["datePad"] = "date-pad";
+				DateFormat["timePad"] = "time-pad";
+				DateFormat["dateTimePad"] = "date-time-pad";
+				DateFormat["timeNoSecPad"] = "time-nosec-pad";
+				DateFormat["dateTimeNoSecPad"] = "date-time-nosec-pad";
+				DateFormat["dateUtcPad"] = "date-utc-pad";
+				DateFormat["timeUtcPad"] = "time-utc-pad";
+				DateFormat["dateTimeUtcPad"] = "date-time-utc-pad";
+				DateFormat["timeUtcNoSecPad"] = "time-nosec-utc-pad";
+				DateFormat["dateTimeNoSecUtcPad"] = "date-time-nosec-utc-pad";
+			})(DateFormat || (DateFormat = {}));
+			class DateFormats {
+				constructor(lang) {
+					this.formatters = new GenerativeMap(format => {
+						if (format.startsWith('day')) {
+							let f = new Intl.DateTimeFormat(lang, {
+								weekday: format.endsWith('-short') ? 'short' : 'long'
+							});
+							return date => f.format(this.normalizeDay(date));
+						} else if (format.startsWith('month')) {
+							let f = new Intl.DateTimeFormat(lang, {
+								month: format.endsWith('-short') ? 'short' : 'long'
+							});
+							return date => f.format(this.normalizeMonth(date));
+						} else if (format.startsWith('year')) {
+							let short = format.endsWith('-short');
+							let f = new Intl.NumberFormat([lang], {
+								useGrouping: false,
+								maximumFractionDigits: 0
+							});
+							return date => {
+								let s = f.format(this.normalizeYear(date));
+								return short ? s.slice(Math.max(0, s.length - 2)) : s;
+							};
+						} else if (format.startsWith('fiscal-year')) {
+							let short = format.endsWith('-short');
+							let start = format.startsWith('fiscal-year-start');
+							let f = new Intl.NumberFormat([lang], {
+								useGrouping: false,
+								maximumFractionDigits: 0
+							});
+							return date => {
+								let y = this.normalizeYear(date);
+								let s0 = f.format(start ? y : y - 1);
+								let s1 = f.format(start ? y + 1 : y);
+								return (short ? s0.slice(Math.max(0, s0.length - 2)) : s0) + '/' + s1.slice(Math.max(0, s1.length - 2));
+							};
+						} else {
+							let f = new Intl.DateTimeFormat(lang, this.format2options(format));
+							return date => f.format(this.normalizeDate(date));
+						}
+					});
+				}
+				format(date, format) {
+					return date == null ? '' : this.formatters.compute(format || DateFormat.dateTime)(date);
+				}
+				normalizeDay(date) {
+					if (typeof date === 'string') return new Date(date);
+					if (date instanceof Date) return date;
+					let w = date >= 0 ? date % 7 : 6 - (-date - 1) % 7;
+					let d = new Date(0);
+					d.setDate(d.getDate() + w - d.getDay());
+					return d;
+				}
+				normalizeMonth(date) {
+					if (typeof date === 'string') return new Date(date);
+					if (date instanceof Date) return date;
+					let m = date >= 0 ? date % 12 : 11 - (-date - 1) % 12;
+					let d = new Date(0);
+					d.setMonth(m);
+					return d;
+				}
+				normalizeYear(date) {
+					if (typeof date === 'string') return new Date(date).getUTCFullYear();
+					if (date instanceof Date) return date.getUTCFullYear();
+					return date;
+				}
+				normalizeDate(date) {
+					return typeof date === 'string' ? new Date(date) : date;
+				}
+				format2options(format) {
+					let nosec = format.includes('-nosec');
+					let pad = format.includes('-pad');
+					let utc = format.includes('-utc');
+					let o = {};
+					if (format.startsWith('date')) {
+						o.year = 'numeric';
+						o.month = pad ? '2-digit' : 'numeric';
+						o.day = pad ? '2-digit' : 'numeric';
+					}
+					if (format.startsWith('time') || format.startsWith('date-time')) {
+						o.hour = pad ? '2-digit' : 'numeric';
+						o.hour12 = pad ? false : undefined;
+						o.minute = '2-digit';
+						o.second = nosec ? undefined : '2-digit';
+						o.timeZoneName = utc ? 'short' : undefined;
+					}
+					o.timeZone = utc ? 'UTC' : undefined;
+					return o;
+				}
+			}
+			const WHITESPACE_CHARS = [' ', '\r', '\f', '\v', '\n', '\t'];
+			const WHITESPACE_CPS = [32, 13, 12, 11, 10, 9];
+
+			function isWhitespace(c) {
+				return c != null && (typeof c === 'string' ? WHITESPACE_CHARS : WHITESPACE_CPS).includes(c);
+			}
+
+			function isUpper(s) {
+				return s != null && s === s.toUpperCase();
+			}
+
+			function escape1(s) {
+				return s == null ? s : s.replace(/(['\\])/g, '\\$1').replace(/\r?\n/g, '\\n');
+			}
+
+			function quote1(s) {
+				return s == null ? s : '\'' + escape1(s) + '\'';
+			}
+
+			function escapeForRegex(str) {
+				return str.replace(/[-[\]{}()*+?.,\\^$|#]/g, '\\$&');
+			}
+
+			function escapeForReplacement(str) {
+				return str.replace(/\$/g, '$$$$');
+			}
+
+			function timestamp() {
+				let d = new Date();
+				return zeroPad(d.getHours(), 2) + ':' + zeroPad(d.getMinutes(), 2) + ':' + zeroPad(d.getSeconds(), 2) + ',' + zeroPad(d.getMilliseconds(), 3);
+			}
+
+			function zeroPad(value, length) {
+				return value.toString().padStart(length, '0');
+			}
+
+			function inspect(o) {
+				if (o === undefined) return 'undefined';
+				let circular = new Set();
+				return JSON.stringify(o, (_key, value) => {
+					if (value === undefined) return 'undefined';
+					if (value instanceof RegExp) return value.source;
+					if (value instanceof Date) return value.toUTCString();
+					let tp = typeof value;
+					if (tp === 'number' && !Number.isFinite(value)) return value.toString();
+					if (tp === 'function' || tp === 'symbol') return value.toString();
+					if (tp === 'object' && value != null) {
+						if (circular.has(value)) {
+							return '_circular_';
+						} else {
+							circular.add(value);
+							return value;
+						}
+					}
+					return value;
+				});
+			}
+			var BlankMode;
+			(function(BlankMode) {
+				BlankMode[BlankMode["straight"] = 0] = "straight";
+				BlankMode[BlankMode["asNull"] = 1] = "asNull";
+				BlankMode[BlankMode["asUndefined"] = 2] = "asUndefined";
+			})(BlankMode || (BlankMode = {}));
+			var NadaMode;
+			(function(NadaMode) {
+				NadaMode[NadaMode["straight"] = 0] = "straight";
+				NadaMode[NadaMode["allowNull"] = 1] = "allowNull";
+				NadaMode[NadaMode["allowUndefined"] = 2] = "allowUndefined";
+				NadaMode[NadaMode["allowNada"] = 3] = "allowNada";
+			})(NadaMode || (NadaMode = {}));
+
+			function str2integer(s) {
+				if (s == null) return s;
+				let v = Number(s);
+				if (!Number.isInteger(v)) throw new Error(`Cannot parse string as integer: ${inspect(s)}`);
+				return v;
+			}
+
+			function str2double(s) {
+				if (s == null) return s;
+				let v = Number(s);
+				if (Number.isNaN(v) && s.trim() !== 'NaN') throw new Error(`Cannot parse string as double: ${inspect(s)}`);
+				return v;
+			}
+
+			function localeStr2number(s, thousandSep, decimalSep) {
+				if (s == null) return s;
+				let result = '';
+				for (let c of s) {
+					if (thousandSep.includes(c));
+					else if (decimalSep.includes(c)) {
+						result += '.';
+					} else {
+						result += c;
+					}
+				}
+				return str2double(result);
+			}
+
+			function limit(x, low, high) {
+				if (x == null) return x;
+				if (high != null) x = Math.min(high, x);
+				if (low != null) x = Math.max(low, x);
+				return x;
+			}
+
+			function precision(x, negative = false) {
+				if (x == null) return x;
+				let precision = 0;
+				let k = 1;
+				while (x * k % 1) {
+					k *= 10;
+					precision++;
+				}
+				if (x && !precision && negative) {
+					k = 10;
+					while (x / k % 1 === 0) {
+						k *= 10;
+						precision--;
+					}
+				}
+				return precision;
+			}
+
+			function decimal(x) {
+				if (typeof x !== 'number') return x;
+				if (!Number.isFinite(x)) return {
+					base: x,
+					power: 0
+				};
+				let power = 0;
+				let k = 1;
+				while (x * k % 1) {
+					k *= 10;
+					power--;
+				}
+				return {
+					base: x * k,
+					power
+				};
+			}
+
+			function normalizeDecimal(x) {
+				if (x == null) return x;
+				if (x.base == null || x.power == null) throw new Error(`Invalid decimal: ${inspect(x)}`);
+				if (Number.isFinite(x.base)) {
+					let k = 1;
+					let base = x.base;
+					let power = x.power;
+					while (base % (k * 10) === 0 && power < 0) {
+						k *= 10;
+						power++;
+					}
+					base /= k;
+					return {
+						base,
+						power
+					};
+				} else {
+					return {
+						base: x.base,
+						power: 0
+					};
+				}
+			}
+
+			function scaleDecimalBase(x, power) {
+				if (x == null) return x;
+				if (x.power === power) return x.base;
+				if (x.power >= power) return x.base * Math.pow(10, x.power - power);
+				return x.base / Math.pow(10, power - x.power);
+			}
+
+			function decimal2number(x) {
+				return x == null || typeof x === 'number' ? x : x.power < 0 ? x.base / Math.pow(10, -x.power) : x.base * Math.pow(10, x.power);
+			}
+
+			function roundToStepDecimal(value, step) {
+				return _toStepDecimal(value, step, _roundToStep);
+			}
+
+			function roundToStep(value, step) {
+				if (step != null && Number.isFinite(value)) value = roundToStepDecimal(value, step);
+				return decimal2number(value);
+			}
+			const _roundToStep = (base, step) => {
+				let low = Math.floor(base / step) * step;
+				let high = low + step;
+				return high - base <= base - low ? high : low;
+			};
+
+			function _toStepDecimal(value, step, round) {
+				step = decimal(step);
+				if (step != null && (step.base <= 0 || !Number.isFinite(step.base))) throw new Error(`Invalid step size: ${inspect(step)}.`);
+				value = decimal(value);
+				if (step == null || value == null || !Number.isFinite(value.base)) return value;
+				let power = Math.min(value.power, step.power);
+				let base = scaleDecimalBase(value, power);
+				let s = scaleDecimalBase(step, power);
+				base = round(base, s);
+				let result = normalizeDecimal({
+					base,
+					power
+				});
+				if (result.base === 0 && value.base < 0) result.base = -0;
+				return result;
+			}
+			class NumericFormats {
+				constructor(options) {
+					this.lang = options.lang;
+					this.units1000 = options.units1000;
+					this._number = new GenerativeMap(precision => {
+						precision = limit(precision, 0, 20);
+						return new Intl.NumberFormat([this.lang], {
+							useGrouping: true,
+							minimumIntegerDigits: 1,
+							minimumFractionDigits: precision ?? 0,
+							maximumFractionDigits: precision ?? 16
+						});
+					});
+					this._numberNoGroup = new GenerativeMap(precision => {
+						precision = limit(precision, 0, 20);
+						return new Intl.NumberFormat([this.lang], {
+							useGrouping: false,
+							minimumIntegerDigits: 1,
+							minimumFractionDigits: precision ?? 0,
+							maximumFractionDigits: precision ?? 16
+						});
+					});
+					this._currency = new GenerativeMap(key => {
+						let parts = key.split('_', 2);
+						let minimumFractionDigits = parts[1] ? limit(str2integer(parts[1]), 0, 20) : 0;
+						let maximumFractionDigits = parts[1] ? minimumFractionDigits : 16;
+						return new Intl.NumberFormat([this.lang], {
+							style: 'currency',
+							currency: parts[0],
+							useGrouping: true,
+							minimumIntegerDigits: 1,
+							minimumFractionDigits,
+							maximumFractionDigits
+						});
+					});
+				}
+				number(value, precision) {
+					if (value == null) return '';
+					if (!Number.isFinite(value)) {
+						precision = undefined;
+					} else if (precision != null) {
+						value = roundToStep(value, {
+							base: 1,
+							power: -precision
+						});
+						precision = Math.max(0, precision);
+					}
+					let formatter = this._number.compute(precision == null ? undefined : precision);
+					return formatter.format(value);
+				}
+				numberNoGroup(value, precision) {
+					if (value == null) return '';
+					if (!Number.isFinite(value)) {
+						precision = undefined;
+					} else if (precision != null) {
+						value = roundToStep(value, {
+							base: 1,
+							power: -precision
+						});
+						precision = Math.max(0, precision);
+					}
+					let formatter = this._numberNoGroup.compute(precision == null ? undefined : precision);
+					return formatter.format(value);
+				}
+				percent(value, precision) {
+					if (value == null) return '';
+					if (!Number.isFinite(value)) {
+						precision = undefined;
+					} else if (precision != null) {
+						let d = roundToStepDecimal(value, {
+							base: 1,
+							power: -precision
+						});
+						d.power += 2;
+						value = decimal2number(d);
+						precision = Math.max(0, precision - 2);
+					} else {
+						value *= 100;
+					}
+					let formatter = this._number.compute(precision == null ? undefined : precision);
+					let s = formatter.format(value);
+					if (Number.isFinite(value)) s += '%';
+					return s;
+				}
+				illion(value, precision$1) {
+					if (value == null) return '';
+					let unit;
+					let p;
+					if (Number.isFinite(value)) {
+						if (precision$1 == null) {
+							precision$1 = precision(value, true);
+						} else {
+							value = roundToStep(value, {
+								base: 1,
+								power: -precision$1
+							});
+						}
+						if (precision$1 >= 0) {
+							p = precision$1;
+						} else {
+							p = 0;
+							if (precision$1 <= -12) {
+								value /= 1000000000000;
+								unit = this.units1000.trillion;
+							} else if (precision$1 <= -9) {
+								value /= 1000000000;
+								unit = this.units1000.billion;
+							} else if (precision$1 <= -6) {
+								value /= 1000000;
+								unit = this.units1000.million;
+							} else if (precision$1 <= -3) {
+								value /= 1000;
+								unit = this.units1000.thousand;
+							}
+						}
+					}
+					let formatter = this._number.compute(p);
+					let s = formatter.format(value);
+					if (unit) s += ' ' + unit;
+					return s;
+				}
+				thousand(value, precision) {
+					return this.wUnit(value, precision, this.units1000.thousand);
+				}
+				million(value, precision) {
+					return this.wUnit(value, precision, this.units1000.million);
+				}
+				billion(value, precision) {
+					return this.wUnit(value, precision, this.units1000.billion);
+				}
+				trillion(value, precision) {
+					return this.wUnit(value, precision, this.units1000.trillion);
+				}
+				wUnit(value, precision, unit) {
+					return value == null ? '' : !Number.isFinite(value) ? this.number(value, precision) : this.number(value, precision) + ' ' + unit;
+				}
+				currency(currency, value, precision) {
+					if (value == null) return '';
+					if (!Number.isFinite(value)) {
+						precision = undefined;
+					} else if (precision != null) {
+						value = roundToStep(value, {
+							base: 1,
+							power: -precision
+						});
+						precision = Math.max(0, precision);
+					}
+					let formatter = this._currency.compute(`${currency}_${precision == null ? '' : precision}`);
+					return formatter.format(value);
+				}
+				bytes(value) {
+					if (value == null) return '';
+					let unit;
+					if (Number.isFinite(value)) {
+						if (value < 1048576) {
+							value /= 1024;
+							unit = 'KB';
+						} else if (value <= 1073741824) {
+							value /= 1048576;
+							unit = 'MB';
+						} else if (value <= 1099511627776) {
+							value /= 1073741824;
+							unit = 'GB';
+						} else if (value <= 1125899906842624) {
+							value /= 1099511627776;
+							unit = 'TB';
+						} else {
+							value /= 1125899906842624;
+							unit = 'PB';
+						}
+						value = roundToStep(value, {
+							base: 1,
+							power: -2
+						});
+					}
+					let formatter = this._number.compute(undefined);
+					let s = formatter.format(value);
+					if (unit) s += ' ' + unit;
+					return s;
+				}
+			}
+			const numericFormats = new NumericFormats({
+				lang: Language.de,
+				units1000: {
+					thousand: 'Tsd.',
+					million: 'Mio.',
+					billion: 'Mrd.',
+					trillion: 'Bio.'
+				}
+			});
+			const dateFormats = new DateFormats(Language.de);
+			const dictionary$1 = {
+				'add': 'Hinzufügen',
+				'cancel': 'Abbrechen',
+				'clear': 'Entfernen',
+				'close': 'Schliessen',
+				'edit': 'Bearbeiten',
+				'remove': 'Entfernen',
+				'reset': 'Zurücksetzen',
+				'submit': 'Bestätigen',
+				dateFormats,
+				numericFormats,
+				'formatBoolean': (v) => v == null ? '' : v ? 'Ja' : 'Nein'
+			};
+			const dictionary$2 = {
+				'dateFormats': dictionary$1['dateFormats'],
+				'numericFormats': dictionary$1['numericFormats'],
+				'boolean': dictionary$1['formatBoolean']
+			};
+			const dictionary$3 = {
+				'required': 'Bitte eingeben.',
+				'minLengthText': (v) => v === 1 ? 'Mindestens ein Buchstabe ist erforderlich.' : `Mindestens ${v} Buchstaben sind erforderlich.`,
+				'maxLengthText': (v) => v === 1 ? 'Höchstens ein Buchstabe ist erlaubt.' : `Höchstens ${v} Buchstaben sind erlaubt.`,
+				'email': 'Bitte geben Sie eine gültige Email Adresse ein.',
+				'emailList': 'Bitte geben Sie eine oder mehrere gültige Email Adressen ein (getrennt durch Kommata).',
+				'minLengthMultiChoices': (v) => v === 1 ? 'Bitte wählen Sie mindestens eine Option.' : `Bitte wählen Sie mindestens ${v} Optionen.`,
+				'maxLengthMultiChoices': (v) => v === 1 ? 'Bitte wählen Sie höchstens eine Option.' : `Bitte wählen Sie höchstens ${v} Optionen.`
+			};
+			const dictionary$4 = {
+				'200': 'Erfolg!',
+				'401': {
+					message: 'Ihre Zugangsberechtigung ist abgelaufen.',
+					button: 'Erneuern'
+				},
+				'403': 'Sie haben keine Zugangsberechtigung für die angeforderte Datei.',
+				'404': 'Die angeforderte Datei ist nicht verfügbar.',
+				'error.title': 'Kein Datenzugang',
+				'error.fallback': (status) => status > 0 ? `Ein unerwarteter Fehler ist aufgetreten (${status}). Lassen Sie uns wissen, falls dieses Problem andauert.` : `Ein unerwarteter Fehler ist aufgetreten. Lassen Sie uns wissen, falls dieses Problem andauert.`,
+			};
+			const dictionary$5 = {
+				'format': (v) => dictionary$1['numericFormats'].number(v)
+			};
+			const dictionary$6 = {
+				'includeNull': 'Fehlende Auswählen',
+				'includeNaN': 'NaN Auswählen',
+				'includeNegInf': '-∞ Auswählen',
+				'includePosInf': '+∞ Auswählen',
+				'countFormat': (v) => dictionary$1['numericFormats'].number(v),
+				'valueFormat': (v, p) => dictionary$1['numericFormats'].number(v, p)
+			};
+			const dictionary$7 = {
+				'valueFormat': (v, p) => dictionary$1['numericFormats'].number(v, p)
+			};
+			const dictionary$8 = {
+				'format': (value, precision) => {
+					precision = limit(precision, 0, 20);
+					return new Intl.NumberFormat(['de'], {
+						useGrouping: true,
+						minimumIntegerDigits: 1,
+						minimumFractionDigits: precision,
+						maximumFractionDigits: precision
+					}).format(value);
+				},
+				'parse': (value) => localeStr2number(value, '.', ',')
+			};
+			const formatter = new Intl.NumberFormat(['de'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$9 = {
+				'format.boolean': (value) => value ? 'Ja' : 'Nein',
+				'format.number': (value) => formatter.format(value),
+			};
+			const formatter$1 = new Intl.NumberFormat(['de'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$a = {
+				'format.boolean': (value) => value ? 'Ja' : 'Nein',
+				'format.number': (value) => formatter$1.format(value)
+			};
+			const dictionary$b = {
+				'bookmark': 'Lesezeichen',
+				'cancel': dictionary$1['cancel'],
+				'edit': dictionary$1['edit'],
+				'remove': dictionary$1['remove'],
+				'submit': dictionary$1['submit']
+			};
+			const dictionary$c = {
+				'close': dictionary$1['close'],
+			};
+			const dictionary$d = {
+				lang: Language.de,
+				'esc.format.runtime': dictionary$2,
+				'esc.validate.runtime': dictionary$3,
+				'esc.error.remote.runtime': dictionary$4,
+				'esc.widgets.control.choices.runtime': dictionary$5,
+				'esc.widgets.control.range.runtime': dictionary$6,
+				'esc.widgets.control.slider.runtime': dictionary$7,
+				'esc.widgets.control.spinner.runtime': dictionary$8,
+				'esc.widgets.data.comp-table.runtime': dictionary$9,
+				'esc.widgets.data.lazy-table.runtime': dictionary$a,
+				'esc.widgets.misc.statemanager.runtime': dictionary$b,
+				'esc.widgets.panel.modal.render': dictionary$c
+			};
+			const dictionary$e = {
+				'selectOpposite': 'Gegenteil Wählen',
+				'selectAll': 'Alle Wählen',
+				'deselectAll': 'Keine Wählen',
+			};
+			const dictionary$f = {
+				'selectOpposite': 'Gegenteil Wählen',
+				'reset': dictionary$1['reset'],
+				'markers': 'Teiler'
+			};
+			const dictionary$g = {
+				'notFound': 'Keine Suchergebnisse gefunden.',
+			};
+			const dictionary$h = {
+				'clear': dictionary$1['clear'],
+			};
+			const dictionary$i = {
+				'yes': 'Ja',
+				'no': 'Nein',
+				'on': 'Ein',
+				'off': 'Aus'
+			};
+			const dictionary$j = {
+				'previous': 'vorherige Seite',
+				'next': 'Nächste Seite',
+				'top': 'zur Spitze gehen',
+				'increase_size': 'Tabellengröße erhöhen',
+				'decrease_size': 'Tabellengröße verringern'
+			};
+			const dictionary$k = {
+				'reset': dictionary$1['reset']
+			};
+			const dictionary$l = {
+				'selectOpposite': 'Gegenteil Wählen',
+				'selectAll': 'Alle Wählen',
+				'deselectAll': 'Keine Wählen',
+			};
+			const dictionary$m = {
+				'reset': dictionary$1['reset'],
+				'fit': 'Auf die ausgeblendeten Daten ausdehnen'
+			};
+			const dictionary$n = {
+				'add': 'Lesezeichen Setzen',
+			};
+			const dictionary$o = Object.assign({
+				'esc.widgets.control.multi-choices.render': dictionary$e,
+				'esc.widgets.control.range.render': dictionary$f,
+				'esc.widgets.control.select.render': dictionary$g,
+				'esc.widgets.control.tags.render': dictionary$h,
+				'esc.widgets.control.toggle.render': dictionary$i,
+				'esc.widgets.data.lazy-table.render': dictionary$j,
+				'esc.widgets.data.map.render': dictionary$k,
+				'esc.widgets.data.pie-chart.render': dictionary$l,
+				'esc.widgets.data.xy-chart.render': dictionary$m,
+				'esc.widgets.misc.statemanager.render': dictionary$n,
+				'esc.widgets.panel.modal.render': dictionary$c
+			}, dictionary$d);
+			const numericFormats$1 = new NumericFormats({
+				lang: Language.en_GB,
+				units1000: {
+					thousand: 'k',
+					million: 'm',
+					billion: 'bn',
+					trillion: 'tn'
+				}
+			});
+			const dateFormats$1 = new DateFormats(Language.en_GB);
+			const dictionary$p = {
+				'add': 'Add',
+				'cancel': 'Cancel',
+				'clear': 'Clear',
+				'close': 'Close',
+				'edit': 'Edit',
+				'remove': 'Remove',
+				'reset': 'Reset',
+				'submit': 'Submit',
+				dateFormats: dateFormats$1,
+				numericFormats: numericFormats$1,
+				'formatBoolean': (v) => v == null ? '' : v ? 'Yes' : 'No'
+			};
+			const dictionary$q = {
+				'dateFormats': dictionary$p['dateFormats'],
+				'numericFormats': dictionary$p['numericFormats'],
+				'boolean': dictionary$p['formatBoolean']
+			};
+			const dictionary$r = {
+				'required': 'Please enter a value.',
+				'minLengthText': (v) => v === 1 ? 'At least one character is required.' : `At least ${v} characters are required.`,
+				'maxLengthText': (v) => v === 1 ? 'At most one character is allowed.' : `At most ${v} characters are allowed.`,
+				'email': 'The value must be a valid email address.',
+				'emailList': 'The value must be one or more valid email addresses (separated by commata).',
+				'minLengthMultiChoices': (v) => v === 1 ? 'At least one option must be selected.' : `At least ${v} options must be selected.`,
+				'maxLengthMultiChoices': (v) => v === 1 ? 'At most one option may be selected.' : `At most ${v} options may be selected.`
+			};
+			const dictionary$s = {
+				'200': 'Success!',
+				'401': {
+					message: 'Your session has expired.',
+					button: 'Refresh'
+				},
+				'403': 'You are not authorized to access the requested file.',
+				'404': 'The requested file is not available.',
+				'error.title': 'Data Access Failure',
+				'error.fallback': (status) => status > 0 ? `Some unexpected error occurred (${status}). Let us know if this problem persists.` : `Some unexpected error occurred. Let us know if this problem persists.`,
+			};
+			const dictionary$t = {
+				'format': (v) => dictionary$p['numericFormats'].number(v)
+			};
+			const dictionary$u = {
+				'includeNull': 'Include Missing',
+				'includeNaN': 'Include NaN',
+				'includeNegInf': 'Include -∞',
+				'includePosInf': 'Include +∞',
+				'countFormat': (v) => dictionary$p['numericFormats'].number(v),
+				'valueFormat': (v, p) => dictionary$p['numericFormats'].number(v, p)
+			};
+			const dictionary$v = {
+				'valueFormat': (v, p) => dictionary$p['numericFormats'].number(v, p)
+			};
+			const dictionary$w = {
+				'format': (value, precision) => {
+					precision = limit(precision, 0, 20);
+					return new Intl.NumberFormat(['en-GB'], {
+						useGrouping: true,
+						minimumIntegerDigits: 1,
+						minimumFractionDigits: precision,
+						maximumFractionDigits: precision
+					}).format(value);
+				},
+				'parse': (value) => localeStr2number(value, ',', '.')
+			};
+			const formatter$2 = new Intl.NumberFormat(['en-GB'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$x = {
+				'format.boolean': (value) => value ? 'Yes' : 'No',
+				'format.number': (value) => formatter$2.format(value),
+			};
+			const formatter$3 = new Intl.NumberFormat(['en-GB'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$y = {
+				'format.boolean': (value) => value ? 'Yes' : 'No',
+				'format.number': (value) => formatter$3.format(value)
+			};
+			const dictionary$z = {
+				'bookmark': 'Bookmark',
+				'cancel': dictionary$p['cancel'],
+				'edit': dictionary$p['edit'],
+				'remove': dictionary$p['remove'],
+				'submit': dictionary$p['submit']
+			};
+			const dictionary$A = {
+				'close': dictionary$p['close'],
+			};
+			const dictionary$B = {
+				lang: Language.en_GB,
+				'esc.format.runtime': dictionary$q,
+				'esc.validate.runtime': dictionary$r,
+				'esc.error.remote.runtime': dictionary$s,
+				'esc.widgets.control.choices.runtime': dictionary$t,
+				'esc.widgets.control.range.runtime': dictionary$u,
+				'esc.widgets.control.slider.runtime': dictionary$v,
+				'esc.widgets.control.spinner.runtime': dictionary$w,
+				'esc.widgets.data.comp-table.runtime': dictionary$x,
+				'esc.widgets.data.lazy-table.runtime': dictionary$y,
+				'esc.widgets.misc.statemanager.runtime': dictionary$z,
+				'esc.widgets.panel.modal.render': dictionary$A
+			};
+			const dictionary$C = {
+				'selectOpposite': 'Select Opposite',
+				'selectAll': 'Select All',
+				'deselectAll': 'Deselect All',
+			};
+			const dictionary$D = {
+				'selectOpposite': 'Select Opposite',
+				'reset': dictionary$p['reset'],
+				'markers': 'Dividers'
+			};
+			const dictionary$E = {
+				'notFound': 'No matching results found.',
+			};
+			const dictionary$F = {
+				'clear': dictionary$p['clear'],
+			};
+			const dictionary$G = {
+				'yes': 'Yes',
+				'no': 'No',
+				'on': 'On',
+				'off': 'Off'
+			};
+			const dictionary$H = {
+				'previous': 'Previous page',
+				'next': 'Next page page',
+				'top': 'Go to top',
+				'increase_size': 'Increase table size',
+				'decrease_size': 'Decrease table size'
+			};
+			const dictionary$I = {
+				'reset': dictionary$p['reset']
+			};
+			const dictionary$J = {
+				'selectOpposite': 'Select Opposite',
+				'selectAll': 'Select All',
+				'deselectAll': 'Deselect All',
+			};
+			const dictionary$K = {
+				'reset': dictionary$p['reset'],
+				'fit': 'Fit to off-screen data'
+			};
+			const dictionary$L = {
+				'add': 'Add Bookmark',
+			};
+			const dictionary$M = Object.assign({
+				'esc.widgets.control.multi-choices.render': dictionary$C,
+				'esc.widgets.control.range.render': dictionary$D,
+				'esc.widgets.control.select.render': dictionary$E,
+				'esc.widgets.control.tags.render': dictionary$F,
+				'esc.widgets.control.toggle.render': dictionary$G,
+				'esc.widgets.data.lazy-table.render': dictionary$H,
+				'esc.widgets.data.map.render': dictionary$I,
+				'esc.widgets.data.pie-chart.render': dictionary$J,
+				'esc.widgets.data.xy-chart.render': dictionary$K,
+				'esc.widgets.misc.statemanager.render': dictionary$L,
+				'esc.widgets.panel.modal.render': dictionary$A
+			}, dictionary$B);
+			const numericFormats$2 = new NumericFormats({
+				lang: Language.en_US,
+				units1000: {
+					thousand: 'k',
+					million: 'm',
+					billion: 'bn',
+					trillion: 'tn'
+				}
+			});
+			const dateFormats$2 = new DateFormats(Language.en_US);
+			const dictionary$N = {
+				'add': 'Add',
+				'cancel': 'Cancel',
+				'clear': 'Clear',
+				'close': 'Close',
+				'edit': 'Edit',
+				'remove': 'Remove',
+				'reset': 'Reset',
+				'submit': 'Submit',
+				dateFormats: dateFormats$2,
+				numericFormats: numericFormats$2,
+				'formatBoolean': (v) => v == null ? '' : v ? 'Yes' : 'No'
+			};
+			const dictionary$O = {
+				'dateFormats': dictionary$N['dateFormats'],
+				'numericFormats': dictionary$N['numericFormats'],
+				'boolean': dictionary$N['formatBoolean']
+			};
+			const dictionary$P = {
+				'required': 'Please enter a value.',
+				'minLengthText': (v) => v === 1 ? 'At least one character is required.' : `At least ${v} characters are required.`,
+				'maxLengthText': (v) => v === 1 ? 'At most one character is allowed.' : `At most ${v} characters are allowed.`,
+				'email': 'The value must be a valid email address.',
+				'emailList': 'The value must be one or more valid email addresses (separated by commata).',
+				'minLengthMultiChoices': (v) => v === 1 ? 'At least one option must be selected.' : `At least ${v} options must be selected.`,
+				'maxLengthMultiChoices': (v) => v === 1 ? 'At most one option may be selected.' : `At most ${v} options may be selected.`
+			};
+			const dictionary$Q = {
+				'200': 'Success!',
+				'401': {
+					message: 'Your session has expired.',
+					button: 'Refresh'
+				},
+				'403': 'You are not authorized to access the requested file.',
+				'404': 'The requested file is not available.',
+				'error.title': 'Data Access Failure',
+				'error.fallback': (status) => status > 0 ? `Some unexpected error occurred (${status}). Let us know if this problem persists.` : `Some unexpected error occurred. Let us know if this problem persists.`,
+			};
+			const dictionary$R = {
+				'format': (v) => dictionary$N['numericFormats'].number(v)
+			};
+			const dictionary$S = {
+				'includeNull': 'Include Missing',
+				'includeNaN': 'Include NaN',
+				'includeNegInf': 'Include -∞',
+				'includePosInf': 'Include +∞',
+				'countFormat': (v) => dictionary$N['numericFormats'].number(v),
+				'valueFormat': (v, p) => dictionary$N['numericFormats'].number(v, p)
+			};
+			const dictionary$T = {
+				'valueFormat': (v, p) => dictionary$N['numericFormats'].number(v, p)
+			};
+			const dictionary$U = {
+				'format': (value, precision) => {
+					precision = limit(precision, 0, 20);
+					return new Intl.NumberFormat(['en-US'], {
+						useGrouping: true,
+						minimumIntegerDigits: 1,
+						minimumFractionDigits: precision,
+						maximumFractionDigits: precision
+					}).format(value);
+				},
+				'parse': (value) => localeStr2number(value, ',', '.')
+			};
+			const formatter$4 = new Intl.NumberFormat(['en-US'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$V = {
+				'format.boolean': (value) => value ? 'Yes' : 'No',
+				'format.number': (value) => formatter$4.format(value),
+			};
+			const formatter$5 = new Intl.NumberFormat(['en-US'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$W = {
+				'format.boolean': (value) => value ? 'Yes' : 'No',
+				'format.number': (value) => formatter$5.format(value)
+			};
+			const dictionary$X = {
+				'bookmark': 'Bookmark',
+				'cancel': dictionary$N['cancel'],
+				'edit': dictionary$N['edit'],
+				'remove': dictionary$N['remove'],
+				'submit': dictionary$N['submit']
+			};
+			const dictionary$Y = {
+				'close': dictionary$N['close'],
+			};
+			const dictionary$Z = {
+				lang: Language.en_US,
+				'esc.format.runtime': dictionary$O,
+				'esc.validate.runtime': dictionary$P,
+				'esc.error.remote.runtime': dictionary$Q,
+				'esc.widgets.control.choices.runtime': dictionary$R,
+				'esc.widgets.control.slider.runtime': dictionary$T,
+				'esc.widgets.control.spinner.runtime': dictionary$U,
+				'esc.widgets.control.range.runtime': dictionary$S,
+				'esc.widgets.data.comp-table.runtime': dictionary$V,
+				'esc.widgets.data.lazy-table.runtime': dictionary$W,
+				'esc.widgets.misc.statemanager.runtime': dictionary$X,
+				'esc.widgets.panel.modal.render': dictionary$Y
+			};
+			const dictionary$_ = {
+				'selectOpposite': 'Select Opposite',
+				'selectAll': 'Select All',
+				'deselectAll': 'Deselect All',
+			};
+			const dictionary$$ = {
+				'selectOpposite': 'Select Opposite',
+				'reset': dictionary$N['reset'],
+				'markers': 'Dividers'
+			};
+			const dictionary$10 = {
+				'notFound': 'No matching results found.',
+			};
+			const dictionary$11 = {
+				'clear': dictionary$N['clear'],
+			};
+			const dictionary$12 = {
+				'yes': 'Yes',
+				'no': 'No',
+				'on': 'On',
+				'off': 'Off'
+			};
+			const dictionary$13 = {
+				'previous': 'Previous page',
+				'next': 'Next page',
+				'top': 'Go to top',
+				'increase_size': 'Increase table size',
+				'decrease_size': 'Decrease table size'
+			};
+			const dictionary$14 = {
+				'reset': dictionary$N['reset']
+			};
+			const dictionary$15 = {
+				'selectOpposite': 'Select Opposite',
+				'selectAll': 'Select All',
+				'deselectAll': 'Deselect All',
+			};
+			const dictionary$16 = {
+				'reset': dictionary$N['reset'],
+				'fit': 'Fit to off-screen data'
+			};
+			const dictionary$17 = {
+				'add': 'Add Bookmark',
+			};
+			const dictionary$18 = Object.assign({
+				'esc.widgets.control.multi-choices.render': dictionary$_,
+				'esc.widgets.control.range.render': dictionary$$,
+				'esc.widgets.control.select.render': dictionary$10,
+				'esc.widgets.control.tags.render': dictionary$11,
+				'esc.widgets.control.toggle.render': dictionary$12,
+				'esc.widgets.data.lazy-table.render': dictionary$13,
+				'esc.widgets.data.map.render': dictionary$14,
+				'esc.widgets.data.pie-chart.render': dictionary$15,
+				'esc.widgets.data.xy-chart.render': dictionary$16,
+				'esc.widgets.misc.statemanager.render': dictionary$17,
+				'esc.widgets.panel.modal.render': dictionary$Y
+			}, dictionary$Z);
+			const numericFormats$3 = new NumericFormats({
+				lang: Language.es,
+				units1000: {
+					thousand: 'k',
+					million: 'm',
+					billion: 'bn',
+					trillion: 'tn'
+				}
+			});
+			const dateFormats$3 = new DateFormats(Language.es);
+			const dictionary$19 = {
+				'add': 'Añadir',
+				'cancel': 'Cancelar',
+				'clear': 'Borrar',
+				'close': 'Cerrar',
+				'edit': 'Editar',
+				'remove': 'Retirar',
+				'reset': 'Reajustar',
+				'submit': 'Enviar',
+				dateFormats: dateFormats$3,
+				numericFormats: numericFormats$3,
+				'formatBoolean': (v) => v == null ? '' : v ? 'Sí' : 'No'
+			};
+			const dictionary$1a = {
+				'dateFormats': dictionary$19['dateFormats'],
+				'numericFormats': dictionary$19['numericFormats'],
+				'boolean': dictionary$19['formatBoolean']
+			};
+			const dictionary$1b = {
+				'required': 'Por favor, ingrese un valor.',
+				'minLengthText': (v) => v === 1 ? 'Debe ingresar al menos un carácter.' : `Debe ingresar al menos ${v} caracteres.`,
+				'maxLengthText': (v) => v === 1 ? 'Puede ingresar como máximo un carácter.' : `Puede ingresar como máximo ${v} caracteres.`,
+				'email': 'Debe ingresar una dirección de e-mail válida.',
+				'emailList': 'Debe ingresar una o más direcciones válidas (separadas por coma).',
+				'minLengthMultiChoices': (v) => v === 1 ? 'Debe seleccionar al menos una opción.' : `Debe seleccionar al menos ${v} opciones.`,
+				'maxLengthMultiChoices': (v) => v === 1 ? 'Puede seleccionar como máximo una opción.' : `Puede seleccionar como máximo ${v} opciones.`
+			};
+			const dictionary$1c = {
+				'200': 'Solicitud exitosa!',
+				'401': {
+					message: 'La sesión ha expirado.',
+					button: 'Refrescar'
+				},
+				'403': 'No tiene permisos para acceder al archivo solicitado.',
+				'404': 'El archivo solicitado no existe.',
+				'error.title': 'Falla de acceso a datos',
+				'error.fallback': (status) => status > 0 ? `Ocurrió algún error inesperado (${status}). Háganos saber si este problema persiste.` : `Ocurrió algún error inesperado. Háganos saber si este problema persiste.`,
+			};
+			const dictionary$1d = {
+				'format': (v) => dictionary$19['numericFormats'].number(v)
+			};
+			const dictionary$1e = {
+				'includeNull': 'Incluir Faltantes',
+				'includeNaN': 'Incluir NaN',
+				'includeNegInf': 'Incluir -∞',
+				'includePosInf': 'Incluir +∞',
+				'countFormat': (v) => dictionary$19['numericFormats'].number(v),
+				'valueFormat': (v, p) => dictionary$19['numericFormats'].number(v, p)
+			};
+			const dictionary$1f = {
+				'valueFormat': (v, p) => dictionary$19['numericFormats'].number(v, p)
+			};
+			const dictionary$1g = {
+				'format': (value, precision) => {
+					precision = limit(precision, 0, 20);
+					return new Intl.NumberFormat(['es'], {
+						useGrouping: true,
+						minimumIntegerDigits: 1,
+						minimumFractionDigits: precision,
+						maximumFractionDigits: precision
+					}).format(value);
+				},
+				'parse': (value) => localeStr2number(value, '.', ',')
+			};
+			const formatter$6 = new Intl.NumberFormat(['es'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$1h = {
+				'format.boolean': (value) => value ? 'Si' : 'No',
+				'format.number': (value) => formatter$6.format(value),
+			};
+			const formatter$7 = new Intl.NumberFormat(['es'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$1i = {
+				'format.boolean': (value) => value ? 'Si' : 'No',
+				'format.number': (value) => formatter$7.format(value)
+			};
+			const dictionary$1j = {
+				'bookmark': 'Marcador',
+				'cancel': dictionary$19['cancel'],
+				'edit': dictionary$19['edit'],
+				'remove': dictionary$19['remove'],
+				'submit': dictionary$19['submit']
+			};
+			const dictionary$1k = {
+				'close': dictionary$19['close'],
+			};
+			const dictionary$1l = {
+				lang: Language.es,
+				'esc.format.runtime': dictionary$1a,
+				'esc.validate.runtime': dictionary$1b,
+				'esc.error.remote.runtime': dictionary$1c,
+				'esc.widgets.control.choices.runtime': dictionary$1d,
+				'esc.widgets.control.slider.runtime': dictionary$1f,
+				'esc.widgets.control.spinner.runtime': dictionary$1g,
+				'esc.widgets.control.range.runtime': dictionary$1e,
+				'esc.widgets.data.comp-table.runtime': dictionary$1h,
+				'esc.widgets.data.lazy-table.runtime': dictionary$1i,
+				'esc.widgets.misc.statemanager.runtime': dictionary$1j,
+				'esc.widgets.panel.modal.render': dictionary$1k
+			};
+			const dictionary$1m = {
+				'selectOpposite': 'Seleccionar Opuesto',
+				'selectAll': 'Seleccionar Todo',
+				'deselectAll': 'Deseleccionar Todo',
+			};
+			const dictionary$1n = {
+				'selectOpposite': 'Seleccionar Opuesto',
+				'reset': dictionary$19['reset'],
+				'markers': 'Divisores'
+			};
+			const dictionary$1o = {
+				'notFound': 'No se han encontrado resultados.',
+			};
+			const dictionary$1p = {
+				'clear': dictionary$19['clear'],
+			};
+			const dictionary$1q = {
+				'yes': 'Sí',
+				'no': 'No',
+				'on': 'Sí',
+				'off': 'No'
+			};
+			const dictionary$1r = {
+				'previous': 'Página anterior',
+				'next': 'Página siguiente',
+				'top': 'Al principio',
+				'increase_size': 'Aumentar el tamaño de la tabla',
+				'decrease_size': 'Disminuir el tamaño de la tabla'
+			};
+			const dictionary$1s = {
+				'reset': dictionary$19['reset']
+			};
+			const dictionary$1t = {
+				'selectOpposite': 'Seleccionar Opuesto',
+				'selectAll': 'Seleccionar Todo',
+				'deselectAll': 'Deseleccionar Todo',
+			};
+			const dictionary$1u = {
+				'reset': dictionary$19['reset'],
+				'fit': 'Ajustar a datos fuera de la pantalla'
+			};
+			const dictionary$1v = {
+				'add': 'Añadir Marcador',
+			};
+			const dictionary$1w = Object.assign({
+				'esc.widgets.control.multi-choices.render': dictionary$1m,
+				'esc.widgets.control.range.render': dictionary$1n,
+				'esc.widgets.control.select.render': dictionary$1o,
+				'esc.widgets.control.tags.render': dictionary$1p,
+				'esc.widgets.control.toggle.render': dictionary$1q,
+				'esc.widgets.data.lazy-table.render': dictionary$1r,
+				'esc.widgets.data.map.render': dictionary$1s,
+				'esc.widgets.data.pie-chart.render': dictionary$1t,
+				'esc.widgets.data.xy-chart.render': dictionary$1u,
+				'esc.widgets.misc.statemanager.render': dictionary$1v,
+				'esc.widgets.panel.modal.render': dictionary$1k
+			}, dictionary$1l);
+			const numericFormats$4 = new NumericFormats({
+				lang: Language.es_419,
+				units1000: {
+					thousand: 'k',
+					million: 'm',
+					billion: 'bn',
+					trillion: 'tn'
+				}
+			});
+			const dateFormats$4 = new DateFormats(Language.es_419);
+			const dictionary$1x = {
+				'add': 'Añadir',
+				'cancel': 'Cancelar',
+				'clear': 'Borrar',
+				'close': 'Cerrar',
+				'edit': 'Editar',
+				'remove': 'Retirar',
+				'reset': 'Reajustar',
+				'submit': 'Enviar',
+				dateFormats: dateFormats$4,
+				numericFormats: numericFormats$4,
+				'formatBoolean': (v) => v == null ? '' : v ? 'Sí' : 'No'
+			};
+			const dictionary$1y = {
+				'dateFormats': dictionary$1x['dateFormats'],
+				'numericFormats': dictionary$1x['numericFormats'],
+				'boolean': dictionary$1x['formatBoolean']
+			};
+			const dictionary$1z = {
+				'required': 'Por favor, ingrese un valor.',
+				'minLengthText': (v) => v === 1 ? 'Debe ingresar al menos un carácter.' : `Debe ingresar al menos ${v} caracteres.`,
+				'maxLengthText': (v) => v === 1 ? 'Puede ingresar como máximo un carácter.' : `Puede ingresar como máximo ${v} caracteres.`,
+				'email': 'Debe ingresar una dirección de e-mail válida.',
+				'emailList': 'Debe ingresar una o más direcciones válidas (separadas por coma).',
+				'minLengthMultiChoices': (v) => v === 1 ? 'Debe seleccionar al menos una opción.' : `Debe seleccionar al menos ${v} opciones.`,
+				'maxLengthMultiChoices': (v) => v === 1 ? 'Puede seleccionar como máximo una opción.' : `Puede seleccionar como máximo ${v} opciones.`
+			};
+			const dictionary$1A = {
+				'200': 'Solicitud exitosa!',
+				'401': {
+					message: 'La sesión ha expirado.',
+					button: 'Refrescar'
+				},
+				'403': 'No tiene permisos para acceder al archivo solicitado.',
+				'404': 'El archivo solicitado no existe.',
+				'error.title': 'Falla de acceso a datos',
+				'error.fallback': (status) => status > 0 ? `Ocurrió algún error inesperado (${status}). Háganos saber si este problema persiste.` : `Ocurrió algún error inesperado. Háganos saber si este problema persiste.`,
+			};
+			const dictionary$1B = {
+				'format': (v) => dictionary$1x['numericFormats'].number(v)
+			};
+			const dictionary$1C = {
+				'includeNull': 'Incluir Faltantes',
+				'includeNaN': 'Incluir NaN',
+				'includeNegInf': 'Incluir -∞',
+				'includePosInf': 'Incluir +∞',
+				'countFormat': (v) => dictionary$1x['numericFormats'].number(v),
+				'valueFormat': (v, p) => dictionary$1x['numericFormats'].number(v, p)
+			};
+			const dictionary$1D = {
+				'valueFormat': (v, p) => dictionary$1x['numericFormats'].number(v, p)
+			};
+			const dictionary$1E = {
+				'format': (value, precision) => {
+					precision = limit(precision, 0, 20);
+					return new Intl.NumberFormat(['es-419'], {
+						useGrouping: true,
+						minimumIntegerDigits: 1,
+						minimumFractionDigits: precision,
+						maximumFractionDigits: precision
+					}).format(value);
+				},
+				'parse': (value) => localeStr2number(value, ',', '.')
+			};
+			const formatter$8 = new Intl.NumberFormat(['es-419'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$1F = {
+				'format.boolean': (value) => value ? 'Si' : 'No',
+				'format.number': (value) => formatter$8.format(value),
+			};
+			const formatter$9 = new Intl.NumberFormat(['es-419'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$1G = {
+				'format.boolean': (value) => value ? 'Si' : 'No',
+				'format.number': (value) => formatter$9.format(value)
+			};
+			const dictionary$1H = {
+				'bookmark': 'Marcador',
+				'cancel': dictionary$1x['cancel'],
+				'edit': dictionary$1x['edit'],
+				'remove': dictionary$1x['remove'],
+				'submit': dictionary$1x['submit']
+			};
+			const dictionary$1I = {
+				'close': dictionary$1x['close'],
+			};
+			const dictionary$1J = {
+				lang: Language.es_419,
+				'esc.format.runtime': dictionary$1y,
+				'esc.validate.runtime': dictionary$1z,
+				'esc.error.remote.runtime': dictionary$1A,
+				'esc.widgets.control.choices.runtime': dictionary$1B,
+				'esc.widgets.control.slider.runtime': dictionary$1D,
+				'esc.widgets.control.spinner.runtime': dictionary$1E,
+				'esc.widgets.control.range.runtime': dictionary$1C,
+				'esc.widgets.data.comp-table.runtime': dictionary$1F,
+				'esc.widgets.data.lazy-table.runtime': dictionary$1G,
+				'esc.widgets.misc.statemanager.runtime': dictionary$1H,
+				'esc.widgets.panel.modal.render': dictionary$1I
+			};
+			const dictionary$1K = {
+				'selectOpposite': 'Seleccionar Opuesto',
+				'selectAll': 'Seleccionar Todo',
+				'deselectAll': 'Deseleccionar Todo',
+			};
+			const dictionary$1L = {
+				'selectOpposite': 'Seleccionar Opuesto',
+				'reset': dictionary$1x['reset'],
+				'markers': 'Divisores'
+			};
+			const dictionary$1M = {
+				'notFound': 'No se han encontrado resultados.',
+			};
+			const dictionary$1N = {
+				'clear': dictionary$1x['clear'],
+			};
+			const dictionary$1O = {
+				'yes': 'Sí',
+				'no': 'No',
+				'on': 'Sí',
+				'off': 'No'
+			};
+			const dictionary$1P = {
+				'previous': 'Página anterior',
+				'next': 'Página siguiente',
+				'top': 'Al principio',
+				'increase_size': 'Aumentar el tamaño de la tabla',
+				'decrease_size': 'Disminuir el tamaño de la tabla'
+			};
+			const dictionary$1Q = {
+				'reset': dictionary$1x['reset']
+			};
+			const dictionary$1R = {
+				'selectOpposite': 'Seleccionar Opuesto',
+				'selectAll': 'Seleccionar Todo',
+				'deselectAll': 'Deseleccionar Todo',
+			};
+			const dictionary$1S = {
+				'reset': dictionary$1x['reset'],
+				'fit': 'Ajustar a datos fuera de la pantalla'
+			};
+			const dictionary$1T = {
+				'add': 'Añadir Marcador',
+			};
+			const dictionary$1U = Object.assign({
+				'esc.widgets.control.multi-choices.render': dictionary$1K,
+				'esc.widgets.control.range.render': dictionary$1L,
+				'esc.widgets.control.select.render': dictionary$1M,
+				'esc.widgets.control.tags.render': dictionary$1N,
+				'esc.widgets.control.toggle.render': dictionary$1O,
+				'esc.widgets.data.lazy-table.render': dictionary$1P,
+				'esc.widgets.data.map.render': dictionary$1Q,
+				'esc.widgets.data.pie-chart.render': dictionary$1R,
+				'esc.widgets.data.xy-chart.render': dictionary$1S,
+				'esc.widgets.misc.statemanager.render': dictionary$1T,
+				'esc.widgets.panel.modal.render': dictionary$1I
+			}, dictionary$1J);
+			const numericFormats$5 = new NumericFormats({
+				lang: Language.pt,
+				units1000: {
+					thousand: 'mil',
+					million: 'mi',
+					billion: 'bi',
+					trillion: 'tri'
+				}
+			});
+			const dateFormats$5 = new DateFormats(Language.pt);
+			const dictionary$1V = {
+				'add': 'Adicionar',
+				'cancel': 'Cancelar',
+				'clear': 'Limpar',
+				'close': 'Fechar',
+				'edit': 'Editar',
+				'remove': 'Remover',
+				'reset': 'Redefinir',
+				'submit': 'Enviar',
+				dateFormats: dateFormats$5,
+				numericFormats: numericFormats$5,
+				'formatBoolean': (v) => v == null ? '' : v ? 'Sim' : 'Não'
+			};
+			const dictionary$1W = {
+				'dateFormats': dictionary$1V['dateFormats'],
+				'numericFormats': dictionary$1V['numericFormats'],
+				'boolean': dictionary$1V['formatBoolean']
+			};
+			const dictionary$1X = {
+				'required': 'Por favor, preencha este campo.',
+				'minLengthText': (v) => v === 1 ? 'Preencha ao menos um caractere.' : `Preencha ao menos ${v} caracteres.`,
+				'maxLengthText': (v) => v === 1 ? 'Apenas até um caractere é permitido.' : `Apenas até ${v} caracteres são permitidos.`,
+				'email': 'Preencha um email válido.',
+				'emailList': 'Preencha um ou mais endereços de email válidos (separados por vírgulas).',
+				'minLengthMultiChoices': (v) => v === 1 ? 'Ao menos uma opção precisa ser selecionada.' : `Ao menos ${v} opções precisam ser selecionadas.`,
+				'maxLengthMultiChoices': (v) => v === 1 ? 'Apenas uma opção deve ser selecionada.' : `Apenas até ${v} opções podem ser selecionadas.`
+			};
+			const dictionary$1Y = {
+				'200': 'Success!',
+				'401': {
+					message: 'Você não está mais logado.',
+					button: 'Recarregar'
+				},
+				'403': 'Você não tem permissão para acessar este arquivo.',
+				'404': 'O arquivo solicitado não está disponível.',
+				'error.title': 'Erro ao acessar os dados',
+				'error.fallback': (status) => status > 0 ? `Um erro inesperado ocorreu (${status}). Avise-nos caso este problema persista.` : `Um erro inesperado ocorreu. Avise-nos caso este problema persista.`,
+			};
+			const dictionary$1Z = {
+				'format': (v) => dictionary$1V['numericFormats'].number(v)
+			};
+			const dictionary$1_ = {
+				'includeNull': 'Incluir Faltantes',
+				'includeNaN': 'Incluir NaN',
+				'includeNegInf': 'Incluir -∞',
+				'includePosInf': 'Incluir +∞',
+				'countFormat': (v) => dictionary$1V['numericFormats'].number(v),
+				'valueFormat': (v, p) => dictionary$1V['numericFormats'].number(v, p)
+			};
+			const dictionary$1$ = {
+				'valueFormat': (v, p) => dictionary$1V['numericFormats'].number(v, p)
+			};
+			const dictionary$20 = {
+				'format': (value, precision) => {
+					precision = limit(precision, 0, 20);
+					return new Intl.NumberFormat(['pt'], {
+						useGrouping: true,
+						minimumIntegerDigits: 1,
+						minimumFractionDigits: precision,
+						maximumFractionDigits: precision
+					}).format(value);
+				},
+				'parse': (value) => localeStr2number(value, ' ,', '.')
+			};
+			const formatter$a = new Intl.NumberFormat(['pt'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$21 = {
+				'format.boolean': (value) => value ? 'Sim' : 'Não',
+				'format.number': (value) => formatter$a.format(value),
+			};
+			const formatter$b = new Intl.NumberFormat(['pt'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$22 = {
+				'format.boolean': (value) => value ? 'Sim' : 'Não',
+				'format.number': (value) => formatter$b.format(value)
+			};
+			const dictionary$23 = {
+				'bookmark': 'Marcador',
+				'cancel': dictionary$1V['cancel'],
+				'edit': dictionary$1V['edit'],
+				'remove': dictionary$1V['remove'],
+				'submit': dictionary$1V['submit']
+			};
+			const dictionary$24 = {
+				'close': dictionary$1V['close'],
+			};
+			const dictionary$25 = {
+				lang: Language.pt,
+				'esc.format.runtime': dictionary$1W,
+				'esc.validate.runtime': dictionary$1X,
+				'esc.error.remote.runtime': dictionary$1Y,
+				'esc.widgets.control.choices.runtime': dictionary$1Z,
+				'esc.widgets.control.slider.runtime': dictionary$1$,
+				'esc.widgets.control.spinner.runtime': dictionary$20,
+				'esc.widgets.control.range.runtime': dictionary$1_,
+				'esc.widgets.data.comp-table.runtime': dictionary$21,
+				'esc.widgets.data.lazy-table.runtime': dictionary$22,
+				'esc.widgets.misc.statemanager.runtime': dictionary$23,
+				'esc.widgets.panel.modal.render': dictionary$24
+			};
+			const dictionary$26 = {
+				'selectOpposite': 'Selecionar Oposto',
+				'selectAll': 'Selecionar Todos',
+				'deselectAll': 'Desselecionar Todos',
+			};
+			const dictionary$27 = {
+				'selectOpposite': 'Seleccionar Opuesto',
+				'reset': dictionary$1V['reset'],
+				'markers': 'Divisores'
+			};
+			const dictionary$28 = {
+				'notFound': 'Nenhum resultado encontrado.',
+			};
+			const dictionary$29 = {
+				'clear': dictionary$1V['clear'],
+			};
+			const dictionary$2a = {
+				'yes': 'Sim',
+				'no': 'Não',
+				'on': 'Sim',
+				'off': 'Não'
+			};
+			const dictionary$2b = {
+				'previous': 'Página anterior',
+				'next': 'Próxima página',
+				'top': 'Ao topo',
+				'increase_size': 'Aumentar tabela',
+				'decrease_size': 'Diminuir tabela'
+			};
+			const dictionary$2c = {
+				'reset': dictionary$1V['reset']
+			};
+			const dictionary$2d = {
+				'selectOpposite': 'Selecionar Oposto',
+				'selectAll': 'Selecionar Todos',
+				'deselectAll': 'Desselecionar Todos',
+			};
+			const dictionary$2e = {
+				'reset': dictionary$1V['reset'],
+				'fit': 'Ajustar a dados fora de tela'
+			};
+			const dictionary$2f = {
+				'add': 'Adicionar Marcador',
+			};
+			const dictionary$2g = Object.assign({
+				'esc.widgets.control.multi-choices.render': dictionary$26,
+				'esc.widgets.control.range.render': dictionary$27,
+				'esc.widgets.control.select.render': dictionary$28,
+				'esc.widgets.control.tags.render': dictionary$29,
+				'esc.widgets.control.toggle.render': dictionary$2a,
+				'esc.widgets.data.lazy-table.render': dictionary$2b,
+				'esc.widgets.data.map.render': dictionary$2c,
+				'esc.widgets.data.pie-chart.render': dictionary$2d,
+				'esc.widgets.data.xy-chart.render': dictionary$2e,
+				'esc.widgets.misc.statemanager.render': dictionary$2f,
+				'esc.widgets.panel.modal.render': dictionary$24
+			}, dictionary$25);
+			const numericFormats$6 = new NumericFormats({
+				lang: Language.pt_BR,
+				units1000: {
+					thousand: 'mil',
+					million: 'mi',
+					billion: 'bi',
+					trillion: 'tri'
+				}
+			});
+			const dateFormats$6 = new DateFormats(Language.pt_BR);
+			const dictionary$2h = {
+				'add': 'Adicionar',
+				'cancel': 'Cancelar',
+				'clear': 'Limpar',
+				'close': 'Fechar',
+				'edit': 'Editar',
+				'remove': 'Remover',
+				'reset': 'Redefinir',
+				'submit': 'Enviar',
+				dateFormats: dateFormats$6,
+				numericFormats: numericFormats$6,
+				'formatBoolean': (v) => v == null ? '' : v ? 'Sim' : 'Não'
+			};
+			const dictionary$2i = {
+				'dateFormats': dictionary$2h['dateFormats'],
+				'numericFormats': dictionary$2h['numericFormats'],
+				'boolean': dictionary$2h['formatBoolean']
+			};
+			const dictionary$2j = {
+				'required': 'Por favor, preencha este campo.',
+				'minLengthText': (v) => v === 1 ? 'Preencha ao menos um caractere.' : `Preencha ao menos ${v} caracteres.`,
+				'maxLengthText': (v) => v === 1 ? 'Apenas até um caractere é permitido.' : `Apenas até ${v} caracteres são permitidos.`,
+				'email': 'Preencha um email válido.',
+				'emailList': 'Preencha um ou mais endereços de email válidos (separados por vírgulas).',
+				'minLengthMultiChoices': (v) => v === 1 ? 'Ao menos uma opção precisa ser selecionada.' : `Ao menos ${v} opções precisam ser selecionadas.`,
+				'maxLengthMultiChoices': (v) => v === 1 ? 'Apenas uma opção deve ser selecionada.' : `Apenas até ${v} opções podem ser selecionadas.`
+			};
+			const dictionary$2k = {
+				'200': 'Sucesso!',
+				'401': {
+					message: 'Você não está mais logado.',
+					button: 'Recarregar'
+				},
+				'403': 'Você não tem permissão para acessar este arquivo.',
+				'404': 'O arquivo solicitado não está disponível.',
+				'error.title': 'Erro ao acessar os dados',
+				'error.fallback': (status) => status > 0 ? `Um erro inesperado ocorreu (${status}). Avise-nos caso este problema persista.` : `Um erro inesperado ocorreu. Avise-nos caso este problema persista.`,
+			};
+			const dictionary$2l = {
+				'format': (v) => dictionary$2h['numericFormats'].number(v)
+			};
+			const dictionary$2m = {
+				'includeNull': 'Incluir Faltantes',
+				'includeNaN': 'Incluir NaN',
+				'includeNegInf': 'Incluir -∞',
+				'includePosInf': 'Incluir +∞',
+				'countFormat': (v) => dictionary$2h['numericFormats'].number(v),
+				'valueFormat': (v, p) => dictionary$2h['numericFormats'].number(v, p)
+			};
+			const dictionary$2n = {
+				'valueFormat': (v, p) => dictionary$2h['numericFormats'].number(v, p)
+			};
+			const dictionary$2o = {
+				'format': (value, precision) => {
+					precision = limit(precision, 0, 20);
+					return new Intl.NumberFormat(['pt-BR'], {
+						useGrouping: true,
+						minimumIntegerDigits: 1,
+						minimumFractionDigits: precision,
+						maximumFractionDigits: precision
+					}).format(value);
+				},
+				'parse': (value) => localeStr2number(value, '.', ',')
+			};
+			const formatter$c = new Intl.NumberFormat(['pt-BR'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$2p = {
+				'format.boolean': (value) => value ? 'Sim' : 'Não',
+				'format.number': (value) => formatter$c.format(value),
+			};
+			const formatter$d = new Intl.NumberFormat(['pt-BR'], {
+				useGrouping: true,
+				minimumIntegerDigits: 1,
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			const dictionary$2q = {
+				'format.boolean': (value) => value ? 'Sim' : 'Não',
+				'format.number': (value) => formatter$d.format(value)
+			};
+			const dictionary$2r = {
+				'bookmark': 'Marcador',
+				'cancel': dictionary$2h['cancel'],
+				'edit': dictionary$2h['edit'],
+				'remove': dictionary$2h['remove'],
+				'submit': dictionary$2h['submit']
+			};
+			const dictionary$2s = {
+				'close': dictionary$2h['close'],
+			};
+			const dictionary$2t = {
+				lang: Language.pt_BR,
+				'esc.format.runtime': dictionary$2i,
+				'esc.validate.runtime': dictionary$2j,
+				'esc.error.remote.runtime': dictionary$2k,
+				'esc.widgets.control.choices.runtime': dictionary$2l,
+				'esc.widgets.control.slider.runtime': dictionary$2n,
+				'esc.widgets.control.spinner.runtime': dictionary$2o,
+				'esc.widgets.control.range.runtime': dictionary$2m,
+				'esc.widgets.data.comp-table.runtime': dictionary$2p,
+				'esc.widgets.data.lazy-table.runtime': dictionary$2q,
+				'esc.widgets.misc.statemanager.runtime': dictionary$2r,
+				'esc.widgets.panel.modal.render': dictionary$2s
+			};
+			const dictionary$2u = {
+				'selectOpposite': 'Selecionar Oposto',
+				'selectAll': 'Selecionar Todos',
+				'deselectAll': 'Desselecionar Todos',
+			};
+			const dictionary$2v = {
+				'selectOpposite': 'Selecionar Oposto',
+				'reset': dictionary$2h['reset'],
+				'markers': 'Divisores'
+			};
+			const dictionary$2w = {
+				'notFound': 'Nenhum resultado encontrado.',
+			};
+			const dictionary$2x = {
+				'clear': dictionary$2h['clear'],
+			};
+			const dictionary$2y = {
+				'yes': 'Sim',
+				'no': 'Não',
+				'on': 'Sim',
+				'off': 'Não'
+			};
+			const dictionary$2z = {
+				'previous': 'Página anterior',
+				'next': 'Próxima página',
+				'top': 'Ao topo',
+				'increase_size': 'Aumentar tabela',
+				'decrease_size': 'Diminuir tabela'
+			};
+			const dictionary$2A = {
+				'reset': dictionary$2h['reset']
+			};
+			const dictionary$2B = {
+				'selectOpposite': 'Selecionar Oposto',
+				'selectAll': 'Selecionar Todos',
+				'deselectAll': 'Desselecionar Todos',
+			};
+			const dictionary$2C = {
+				'reset': dictionary$2h['reset'],
+				'fit': 'Ajustar a dados fora de tela'
+			};
+			const dictionary$2D = {
+				'add': 'Adicionar Marcador',
+			};
+			const dictionary$2E = Object.assign({
+				'esc.widgets.control.multi-choices.render': dictionary$2u,
+				'esc.widgets.control.range.render': dictionary$2v,
+				'esc.widgets.control.select.render': dictionary$2w,
+				'esc.widgets.control.tags.render': dictionary$2x,
+				'esc.widgets.control.toggle.render': dictionary$2y,
+				'esc.widgets.data.lazy-table.render': dictionary$2z,
+				'esc.widgets.data.map.render': dictionary$2A,
+				'esc.widgets.data.pie-chart.render': dictionary$2B,
+				'esc.widgets.data.xy-chart.render': dictionary$2C,
+				'esc.widgets.misc.statemanager.render': dictionary$2D,
+				'esc.widgets.panel.modal.render': dictionary$2s
+			}, dictionary$2t);
+			const languages = {
+				de: dictionary$o,
+				en: dictionary$18,
+				'en-GB': dictionary$M,
+				'en-US': dictionary$18,
+				es: dictionary$1w,
+				'es-419': dictionary$1U,
+				pt: dictionary$2g,
+				'pt-BR': dictionary$2E
+			};
+
+			function setLang(value) {
+				let lang = toEnum(value, Language, Language.en_US);
+				setDictionary(languages[lang]);
+			}
+			let $ = DEFAULT_$;
+			let $$;
+
+			function DEFAULT_$(selector, context) {
+				if (context == null) return $$().first();
+				return $$().first();
+			}
+
+			function set$(selector) {
+				$ = selector || DEFAULT_$;
+			}
+			var log;
+			(function(log) {
+				let _implementation;
+
+				function implementation(implementation) {
+					_implementation = implementation;
+					return log;
+				}
+				log.implementation = implementation;
+				const maxNoMessagesDefault = -1;
+				let noLogging = true;
+				let _showTime = false;
+				let _showTrace = false;
+				let _maxNoMessages = maxNoMessagesDefault;
+				const debugEnabled = [];
+				const infoEnabled = [];
+				const warnEnabled = [];
+				const errorEnabled = [];
+
+				function debug(...topics) {
+					return configure({
+						debug: topics == null || topics.length === 0 ? ['*'] : topics
+					}, false);
+				}
+				log.debug = debug;
+
+				function info(...topics) {
+					return configure({
+						info: topics == null || topics.length === 0 ? ['*'] : topics
+					}, false);
+				}
+				log.info = info;
+
+				function warn(...topics) {
+					return configure({
+						warn: topics == null || topics.length === 0 ? ['*'] : topics
+					}, false);
+				}
+				log.warn = warn;
+
+				function error(...topics) {
+					return configure({
+						error: topics == null || topics.length === 0 ? ['*'] : topics
+					}, false);
+				}
+				log.error = error;
+
+				function showTime(showTime = true) {
+					return configure({
+						showTime: showTime === true
+					}, true);
+				}
+				log.showTime = showTime;
+
+				function showTrace(showTrace = true) {
+					return configure({
+						showTrace: showTrace === true
+					}, true);
+				}
+				log.showTrace = showTrace;
+
+				function maxNoMessages(maxNoMessages = -1) {
+					return configure({
+						maxNoMessages
+					}, true);
+				}
+				log.maxNoMessages = maxNoMessages;
+
+				function configure(options, incremental = true) {
+					options = options || {};
+					if (!incremental) {
+						debugEnabled.length = 0;
+						infoEnabled.length = 0;
+						warnEnabled.length = 0;
+						errorEnabled.length = 0;
+						_showTime = false;
+						_showTrace = false;
+						_maxNoMessages = maxNoMessagesDefault;
+					}
+					enable(options.debug, debugEnabled);
+					enable(options.info, infoEnabled);
+					enable(options.warn, warnEnabled);
+					enable(options.error, errorEnabled);
+					noLogging = debugEnabled.length === 0 && infoEnabled.length === 0 && warnEnabled.length === 0 && errorEnabled.length === 0;
+					if (options.showTime != null) _showTime = options.showTime;
+					if (options.showTrace != null) _showTrace = options.showTrace;
+					if (options.maxNoMessages != null) _maxNoMessages = Math.max(-1, options.maxNoMessages);
+					updateLoggers();
+					return log;
+				}
+				log.configure = configure;
+
+				function configuration() {
+					return {
+						debug: debugEnabled.slice(),
+						info: infoEnabled.slice(),
+						warn: warnEnabled.slice(),
+						error: errorEnabled.slice(),
+						showTime: _showTime,
+						showTrace: _showTrace,
+						maxNoMessages: _maxNoMessages
+					};
+				}
+				log.configuration = configuration;
+
+				function enable(topics, enabled) {
+					if (topics != null) {
+						for (let topic of topics) {
+							if (topic.length > 1 && topic.endsWith('*')) topic = topic.substring(0, topic.length - 1);
+							if (!enabled.includes(topic)) enabled.push(topic);
+						}
+					}
+				}
+
+				function isEnabled(topic, topics) {
+					if (topics == null) return true;
+					for (let tpc of topics) {
+						while (tpc.endsWith('*')) tpc = tpc.substring(0, tpc.length - 1);
+						if (tpc.length === 0 || (tpc.length <= topic.length && tpc === topic.substring(0, tpc.length))) return true;
+					}
+					return false;
+				}
+				const updateListeners = new Set();
+
+				function onUpdate(listener) {
+					if (listener) updateListeners.add(listener);
+					return log;
+				}
+				log.onUpdate = onUpdate;
+				let LogLevel;
+				(function(LogLevel) {
+					LogLevel[LogLevel["debug"] = 0] = "debug";
+					LogLevel[LogLevel["info"] = 1] = "info";
+					LogLevel[LogLevel["warn"] = 2] = "warn";
+					LogLevel[LogLevel["error"] = 3] = "error";
+				})(LogLevel = log.LogLevel || (log.LogLevel = {}));
+
+				function determineLogLevel(topic) {
+					if (noLogging) return null;
+					if (isEnabled(topic, debugEnabled)) return LogLevel.debug;
+					if (isEnabled(topic, infoEnabled)) return LogLevel.info;
+					if (isEnabled(topic, warnEnabled)) return LogLevel.warn;
+					if (isEnabled(topic, errorEnabled)) return LogLevel.error;
+					return null;
+				}
+				log.determineLogLevel = determineLogLevel;
+				const loggers = Object.create(null);
+
+				function logger(topic) {
+					let logger = loggers[topic];
+					if (logger == null) {
+						logger = {
+							log: emptyFu,
+							debug: emptyFu,
+							info: emptyFu,
+							warn: emptyFu,
+							error: emptyFu,
+							isDebugEnabled: false,
+							isInfoEnabled: false,
+							isWarnEnabled: false,
+							isErrorEnabled: false
+						};
+						updateLogger(topic, logger);
+						loggers[topic] = logger;
+					}
+					return logger;
+				}
+				log.logger = logger;
+
+				function updateLoggers() {
+					for (let topic in loggers) {
+						updateLogger(topic, loggers[topic]);
+					}
+					updateListeners.forEach(listener => listener());
+				}
+
+				function type2EnabledMethod(type) {
+					return ('is' + type.charAt(0).toUpperCase() + type.slice(1) + 'Enabled');
+				}
+				log.ERROR_PREFIX = '[ERROR] ';
+				log.WARN_PREFIX = '[WARN]  ';
+				log.INFO_PREFIX = '[INFO]  ';
+				log.DEBUG_PREFIX = '[DEBUG] ';
+
+				function type2prefix(type) {
+					switch (type) {
+						case 'error':
+							return log.ERROR_PREFIX;
+						case 'warn':
+							return log.WARN_PREFIX;
+						case 'info':
+							return log.INFO_PREFIX;
+						default:
+							return log.DEBUG_PREFIX;
+					}
+				}
+
+				function constructLog(topic, logger, type) {
+					let prefix = `${type2prefix(type)}${topic}`;
+					let noCalls = 0;
+					return function(...args) {
+						if (_implementation == null || (_maxNoMessages >= 0 && noCalls >= _maxNoMessages)) return;
+						let prefix0 = _showTime ? `${timestamp()} ${prefix}` : prefix;
+						if (args.length > 0 && typeof args[0] === 'string') {
+							args[0] = `${prefix0} - ${args[0]}`;
+						} else {
+							args.unshift(prefix0);
+						}
+						_implementation(args, _showTrace);
+						if (_maxNoMessages >= 0 && ++noCalls >= _maxNoMessages) {
+							_implementation([`*** Retiring logger after ${_maxNoMessages} invocations. *** `], false);
+							logger[type] = emptyFu;
+							logger[type2EnabledMethod(type)] = false;
+						}
+					};
+				}
+				const emptyFu = function() {};
+
+				function updateLogger(topic, logger) {
+					let level = determineLogLevel(topic);
+					for (let type of Object.keys(LogLevel)) {
+						let enabledMethod = type2EnabledMethod(type);
+						logger[enabledMethod] = level != null && level <= LogLevel[type];
+						logger[type] = logger[enabledMethod] ? constructLog(topic, logger, type) : emptyFu;
+					}
+				}
+			})(log || (log = {}));
+			class AssertionError extends Error {
+				constructor(message) {
+					super(message);
+					if (Error.captureStackTrace) Error.captureStackTrace(this, AssertionError);
+					this.name = 'AssertionError';
+				}
+			}
+
+			function isDom(arg) {
+				return arg != null && typeof arg === 'object' && 'parentsUntil' in arg;
+			}
+
+			function isText(arg) {
+				return arg != null && typeof arg === 'object' && 'encoded' in arg && 'content' in arg;
+			}
+
+			function injectContent(content, target) {
+				_setContent(content, target, true);
+			}
+
+			function _setContent(content, target, inject) {
+				if (target == null) return;
+				if (content == null) {
+					target.empty();
+				} else if (typeof content === 'string') {
+					target.text(content);
+				} else if (isText(content)) {
+					if (content.encoded === true) {
+						target.html(content.content || '');
+					} else {
+						target.text(content.content || '');
+					}
+				} else if (Array.isArray(content)) {
+					target.empty();
+					for (let c of content) target.append(c);
+				} else if (inject && isWrapper(content)) {
+					target.empty().append(content.contents());
+					copyAttributes(content.attr(), target);
+				} else if (isDom(content)) {
+					target.empty().append(content);
+				} else {
+					throw new Error(`Invalid DOM content: ${inspect(content)}`);
+				}
+			}
+
+			function isWrapper(element) {
+				if (!element || element.length !== 1) return false;
+				let tagName = (element.get(0).tagName || '').toLowerCase();
+				return tagName === 'div' || tagName === 'span';
+			}
+
+			function copyAttributes(attributes, target) {
+				if (attributes == null || target == null) return;
+				for (let attribute in attributes) {
+					let value = attributes[attribute];
+					if (attribute === 'class') {
+						if (value) target.addClass(value);
+					} else if (attribute === 'style') {
+						if (value) {
+							let value0 = target.attr('style');
+							if (value0) {
+								if (!value0.trim().endsWith(';')) value0 += ';';
+								target.attr('style', value0 + value);
+							} else {
+								target.attr('style', value);
+							}
+						}
+					} else {
+						let v = target.attr(attribute) || undefined;
+						if (v && v !== value) throw new Error(`Cannot copy source attribute '${attribute}=${value}' - target has '${attribute}=${v}'.`);
+						if (!v) target.attr(attribute, value);
+					}
+				}
+			}
+			var TargetType;
+			(function(TargetType) {
+				TargetType["replace"] = "replace";
+				TargetType["merge"] = "merge";
+				TargetType["inject"] = "inject";
+				TargetType["append"] = "append";
+				TargetType["prepend"] = "prepend";
+				TargetType["before"] = "before";
+				TargetType["after"] = "after";
+			})(TargetType || (TargetType = {}));
+
+			function normalizeTarget(target) {
+				if (target == null) return target;
+				let element;
+				let type;
+				if (typeof target === 'object' && 'element' in target) {
+					element = target.element;
+					type = toEnum(target.type, TargetType, TargetType.replace);
+				} else {
+					element = target;
+					type = TargetType.replace;
+				}
+				return {
+					element,
+					type
+				};
+			}
+
+			function toTarget(content, target) {
+				if (content == null || target == null) return;
+				let target0 = normalizeTarget(target);
+				switch (target0.type) {
+					case TargetType.replace:
+						target0.element.replaceWith(content);
+						break;
+					case TargetType.merge:
+						copyAttributes(target0.element.attr(), content);
+						target0.element.replaceWith(content);
+						break;
+					case TargetType.inject:
+						copyAttributes(content.attr(), target0.element);
+						target0.element.append(content.contents());
+						break;
+					case TargetType.append:
+						target0.element.append(content);
+						break;
+					case TargetType.prepend:
+						target0.element.prepend(content);
+						break;
+					case TargetType.before:
+						target0.element.before(content);
+						break;
+					case TargetType.after:
+						target0.element.after(content);
+						break;
+					default:
+						throw new AssertionError(`TargetType not recognized: ${target0.type}`);
+				}
+			}
+
+			function widget2target(widget, options) {
+				if (widget != null) {
+					copyAttributes(options.attributes, widget);
+					toTarget(widget, options.target);
+				}
+			}
+			const ATTR_ELEMENT_ID = 'data-esc-id';
+			const SELECTION_EVENT = 'esc-selection';
+
+			function serialize(o, space, omitUndefined = false) {
+				return JSON.stringify(o, omitUndefined ? _serialize1 : _serialize2, space);
+			}
+
+			function _serialize1(_key, v) {
+				if (typeof v === 'string') {
+					return serializeString(v);
+				} else if (typeof v === 'number') {
+					return serializeDouble(v);
+				} else {
+					return v;
+				}
+			}
+
+			function _serialize2(key, v) {
+				return v === undefined ? 'undefined' : _serialize1(key, v);
+			}
+
+			function serializeString(v) {
+				return needsEncoding(v) ? `"${v}"` : v;
+			}
+
+			function needsEncoding(s) {
+				if (!s || s.length < 3) return false;
+				let lcount = 0;
+				for (let i = 0; i < s.length && s.charAt(i) === '"'; i++) lcount++;
+				let rcount = 0;
+				for (let i = s.length - 1; i >= 0 && s.charAt(i) === '"'; i--) rcount++;
+				if (lcount !== rcount || lcount + rcount >= s.length) return false;
+				if (lcount) s = s.substring(lcount, s.length - rcount);
+				return s === 'undefined' || s === 'NaN' || s === 'Infinity' || s === '+Infinity' || s === '-Infinity';
+			}
+
+			function serializeDouble(v) {
+				if (Number.isNaN(v)) {
+					return 'NaN';
+				} else if (v === Number.POSITIVE_INFINITY) {
+					return 'Infinity';
+				} else if (v === Number.NEGATIVE_INFINITY) {
+					return '-Infinity';
+				} else {
+					return v;
+				}
+			}
+			const ATTRIBUTE_PROCESS_PREFIX = 'data-esc-process-';
+
+			function data(element, processorName, data) {
+				if (element == null) return;
+				if (processorName == null) {
+					let attributes = element.attr() || {};
+					for (let attribute of Object.keys(attributes)) {
+						if (attribute.startsWith(ATTRIBUTE_PROCESS_PREFIX)) {
+							element.attr(attribute, null);
+						}
+					}
+				} else if (!processorName) {
+					throw new Error('Processor name must be non-empty.');
+				} else {
+					if (processorName.startsWith('esc-')) processorName = processorName.substring(4);
+					let attribute = ATTRIBUTE_PROCESS_PREFIX + processorName;
+					if (data === undefined) {
+						element.attr(attribute, null);
+					} else {
+						element.attr(attribute, data == null ? '' : serialize(data));
+					}
+				}
+			}
+
+			function addProcessingData(widget, processorName, options) {
+				options = normalize(options);
+				data(widget, processorName, options);
+			}
+
+			function normalize(options) {
+				if (options == null) return null;
+				let result = {};
+				let hasKey = false;
+				for (let [key, value] of Object.entries(options)) {
+					if (value !== undefined) {
+						result[key] = value;
+						hasKey = true;
+					}
+				}
+				return hasKey ? result : null;
+			}
+			const DESTROY_EVENT = 'esc-destroy';
+
+			function unescapeId(id) {
+				return id.replace(/\\:/g, ':');
+			}
+
+			function parseCallbackTarget(s, defaultMethod) {
+				if (s == null) return s;
+				let match = /^\s*([\s\S]+?)\s*(?:::\s*([\s\S]*?)\s*(?::\s*([^:][\s\S]*?)\s*)?)?(?:::\s*([\s\S]*?)\s*)?$/.exec(s);
+				if (!match) throw new Error(`Invalid callback target: ${s}`);
+				let target = match[1];
+				if (target.startsWith('#')) target = unescapeId(target.substring(1));
+				let method = match[2] || defaultMethod;
+				let id = match[3] || undefined;
+				if (id && !isPutMethod(method)) throw new Error(`Invalid callback target - id is only supported for put method: ${s}`);
+				let transform = match[4] || undefined;
+				return {
+					target,
+					method,
+					id,
+					transform
+				};
+			}
+
+			function isPutMethod(method) {
+				return method.startsWith('put') && isUpper(method.charAt(3));
+			}
+
+			function normalizeCallbackTarget(target, defaultMethod) {
+				return typeof target === 'string' ? parseCallbackTarget(target, defaultMethod) : target;
+			}
+
+			function normalizeCallbackTargets(callbackTargets, defaultMethod) {
+				if (callbackTargets == null) return callbackTargets;
+				let unique = new Set();
+				let result = [];
+				for (let target of callbackTargets) {
+					let parsed = normalizeCallbackTarget(target, defaultMethod);
+					if (!parsed) continue;
+					let key = parsed.target + '::' + parsed.method;
+					if (parsed.id) key += ':' + parsed.id;
+					if (unique.has(key)) throw new Error(`Target with method '${parsed.method}' has been duplicated: ${parsed.target}`);
+					unique.add(key);
+					result.push(parsed);
+				}
+				return result.length ? result : undefined;
+			}
+
+			function serializeCallbackTargets(callbackTargets, defaultMethod) {
+				return callbackTargets && callbackTargets.map(target => serializeCallbackTarget(target, defaultMethod));
+			}
+
+			function serializeCallbackTarget(callbackTarget, defaultMethod) {
+				if (callbackTarget == null) return callbackTarget;
+				let method = callbackTarget.method === defaultMethod ? '' : callbackTarget.method;
+				if (callbackTarget.id) method += ':' + callbackTarget.id;
+				if (callbackTarget.transform) {
+					return `${callbackTarget.target}::${method}::${callbackTarget.transform}`;
+				} else if (method) {
+					return `${callbackTarget.target}::${method}`;
+				} else {
+					return callbackTarget.target;
+				}
+			}
+			const logger = log.logger('esc.framework.preRenderCallbacks');
+
+			function preRenderCallbacks(callbacks, eventType) {
+				if (!callbacks) return undefined;
+				let callbacks0 = Array.isArray(callbacks) ? callbacks : [callbacks];
+				let result = [];
+				for (let callback of callbacks0) {
+					if (!callback) continue;
+					if (typeof callback !== 'string') throw new Error(`During pre-rendering, only string-valued ${eventType} callbacks are allowed: ${callback}`);
+					logger.info(`Pre-rendered ${eventType} callbacks may introduce memory leaks to called objects: ${callback}`);
+					result.push(callback);
+				}
+				return result.length ? result : undefined;
+			}
+
+			function preRenderCallbackTargets(callbackTargets, defaultMethod) {
+				let callbackTargets0 = normalizeCallbackTargets(callbackTargets, defaultMethod);
+				return serializeCallbackTargets(callbackTargets0, defaultMethod) || undefined;
+			}
+
+			function preRenderDestroyable(widget, processorName, options) {
+				if (options) {
+					let onDestroy = preRenderCallbacks(options.onDestroy, DESTROY_EVENT);
+					options = Object.assign({}, options, {
+						onDestroy
+					});
+				}
+				addProcessingData(widget, processorName, options);
+			}
+
+			function preRenderSelectionProvider(widget, processorName, options) {
+				if (options) {
+					if (options.validateSelection != null && typeof options.validateSelection !== 'string') throw new Error(`During pre-rendering, selection validators must be string-valued: ${options.validateSelection}`);
+					let onSelection = preRenderCallbacks(options.onSelection, SELECTION_EVENT);
+					let selectables = preRenderCallbackTargets(options.selectables, 'setSelection');
+					options = Object.assign({}, options, {
+						onSelection,
+						selectables
+					});
+				}
+				preRenderDestroyable(widget, processorName, options);
+			}
+
+			function validateOptions(options) {
+				if (!options) return;
+				let unique = new Set();
+				for (let option of options) {
+					let id = option.id;
+					if (id === undefined) throw new Error('Option must not have undefined id.');
+					if (unique.has(id)) throw new Error(`Option id ${inspect(id)} is duplicated.`);
+					unique.add(id);
+				}
+			}
+			const CLASS_DISABLED = 'esc-is-disabled';
+			var DisabledMode;
+			(function(DisabledMode) {
+				DisabledMode["inactive"] = "inactive";
+				DisabledMode["hidden"] = "hidden";
+				DisabledMode["collapsed"] = "collapsed";
+			})(DisabledMode || (DisabledMode = {}));
+			var EmptyMode;
+			(function(EmptyMode) {
+				EmptyMode["collapsed"] = "collapsed";
+				EmptyMode["preserved"] = "preserved";
+			})(EmptyMode || (EmptyMode = {}));
+			var Orientation;
+			(function(Orientation) {
+				Orientation["horizontal"] = "horizontal";
+				Orientation["vertical"] = "vertical";
+			})(Orientation || (Orientation = {}));
+			var Type;
+			(function(Type) {
+				Type["strong"] = "strong";
+				Type["ghost"] = "ghost";
+				Type["subtle"] = "subtle";
+			})(Type || (Type = {}));
+			var Style;
+			(function(Style) {
+				Style["regular"] = "regular";
+				Style["light"] = "light";
+			})(Style || (Style = {}));
+			var Layout;
+			(function(Layout) {
+				Layout["row"] = "row";
+				Layout["column"] = "column";
+				Layout["grid"] = "grid";
+			})(Layout || (Layout = {}));
+			var HorizontalAlignment;
+			(function(HorizontalAlignment) {
+				HorizontalAlignment["justify"] = "justify";
+				HorizontalAlignment["left"] = "left";
+				HorizontalAlignment["right"] = "right";
+				HorizontalAlignment["center"] = "center";
+			})(HorizontalAlignment || (HorizontalAlignment = {}));
+			var VerticalAlignment;
+			(function(VerticalAlignment) {
+				VerticalAlignment["stretch"] = "stretch";
+				VerticalAlignment["top"] = "top";
+				VerticalAlignment["bottom"] = "bottom";
+				VerticalAlignment["middle"] = "middle";
+			})(VerticalAlignment || (VerticalAlignment = {}));
+
+			function renderEnablable(control, options) {
+				if (options.enabled === false) control.addClass(CLASS_DISABLED);
+				let mode = toEnum(options.disabledMode, DisabledMode, DisabledMode.inactive);
+				if (mode !== DisabledMode.inactive) control.addClass(`esc-m-disabled-${mode}`);
+			}
+			var SelectionMode;
+			(function(SelectionMode) {
+				SelectionMode["none"] = "none";
+				SelectionMode["row"] = "row";
+				SelectionMode["cell"] = "cell";
+			})(SelectionMode || (SelectionMode = {}));
+			var INIT;
+			(function(INIT) {})(INIT || (INIT = {}));
+
+			function i18n(key) {
+				let dictionary = getDictionary();
+				let value = dictionary[key];
+				if (value == null) throw new Error(`Key '${key}' not found in dictionary '${dictionary.lang}'.`);
+				return value;
+			}
+
+			function i18n$1(key) {
+				return i18n('esc.widgets.data.lazy-table.render')[key];
+			}
+			var Sorted;
+			(function(Sorted) {
+				Sorted["no"] = "no";
+				Sorted["asc"] = "asc";
+				Sorted["desc"] = "desc";
+			})(Sorted || (Sorted = {}));
+			var TableSize;
+			(function(TableSize) {
+				TableSize["small"] = "small";
+				TableSize["medium"] = "medium";
+				TableSize["large"] = "large";
+				TableSize["auto"] = "auto";
+			})(TableSize || (TableSize = {}));
+			const ATTR_VARIABLE = 'data-esc-variable';
+			const ATTR_VARIABLES = 'data-esc-variables';
+			const CLASS_NOT_SCROLLABLE = 'esc-m-not-scrollable';
+			const CLASS_INDEX = 'esc-m-index';
+			const CLASS_TYPE_TEXT = 'esc-m-text';
+			const CLASS_TYPE_HTML = 'esc-m-html';
+			const CLASS_TYPE_NUMERIC = 'esc-m-numeric';
+			const CLASS_SORT_ASCEND = 'esc-is-sort-asc';
+			const CLASS_SORT_DESCEND = 'esc-is-sort-desc';
+			const CLASS_SELECTABLE_ROW = 'esc-m-row-selectable';
+			const CLASS_SELECTABLE_CELL = 'esc-m-cell-selectable';
+
+			function normalizeCsvSymbols(symbols) {
+				symbols = symbols || {};
+				let delimiter = symbols.delimiter || ',';
+				if (delimiter.length !== 1) throw new Error(`Delimiter must be single character: ${inspect(delimiter)}`);
+				if (delimiter === '\r' || delimiter === '\n') throw new Error('Delimiter must not be \r or \n.');
+				let quote = symbols.quote || '"';
+				if (quote.length !== 1) throw new Error(`Quote must be single character: ${inspect(quote)}`);
+				if (quote === '\r' || quote === '\n') throw new Error('Quote must not be \r or \n.');
+				if (delimiter === quote) throw new Error(`Quote and delimiter cannot be identical: ${inspect(quote)}`);
+				return {
+					delimiter,
+					quote
+				};
+			}
+
+			function _stringify(value) {
+				return value == null ? 'null' : value.toString();
+			}
+			class CsvJoiner {
+				constructor(options) {
+					let symbols = normalizeCsvSymbols(options);
+					this.delimiter = symbols.delimiter;
+					this.quote = symbols.quote;
+					this.quoteRegex = escapeForRegex(this.quote);
+					this.doubleQuoteRepl = escapeForReplacement(this.quote + this.quote);
+					this.stringify = options && options.stringify || _stringify;
+					this.first = true;
+					this.callback = options.line;
+				}
+				row2line(row) {
+					return row.map(v => this.value2token(v)).join(this.delimiter);
+				}
+				value2token(value) {
+					let s = this.stringify(value);
+					return (s.length && (isWhitespace(s.charAt(0)) || isWhitespace(s.charAt(s.length - 1)) || s.includes(this.quote) || s.includes(this.delimiter) || s.includes('\n'))) ? this.quote + s.replace(new RegExp(this.quoteRegex, 'g'), this.doubleQuoteRepl) + this.quote : s;
+				}
+				join(row) {
+					if (row) {
+						let line = this.row2line(row);
+						if (this.first) {
+							this.first = false;
+						} else {
+							line = '\n' + line;
+						}
+						this.callback(line);
+					}
+					return this;
+				}
+			}
+
+			function joinRow(row, options) {
+				if (!row) return row;
+				let csv;
+				new CsvJoiner(Object.assign({}, options, {
+					line: (line) => {
+						csv = line;
+					}
+				})).join(row);
+				return csv;
+			}
+			var ColumnType;
+			(function(ColumnType) {
+				ColumnType["plain"] = "plain";
+				ColumnType["text"] = "text";
+				ColumnType["html"] = "html";
+				ColumnType["numeric"] = "numeric";
+			})(ColumnType || (ColumnType = {}));
+
+			function renderGroups(groups, head) {
+				head.empty();
+				if (!groups?.length) return;
+				let headRow = $('<tr/>').appendTo(head);
+				for (let g of groups) {
+					if (g.columns.length) {
+						let cell = $('<th/>');
+						cell.attr('colspan', g.columns.length);
+						injectContent(g.label, cell);
+						headRow.append(cell);
+					}
+				}
+				let columns = groups.reduce((agg, g) => (agg.push(...g.columns), agg), []);
+				appendColumns(columns, head);
+			}
+
+			function renderColumns(columns, head) {
+				head.empty();
+				appendColumns(columns, head);
+			}
+
+			function appendColumns(columns, head) {
+				if (!columns?.length) return;
+				let headRow = $('<tr/>').appendTo(head);
+				for (let column of columns) {
+					let columnType = toEnum(column.type, ColumnType, ColumnType.plain);
+					let sorted = toEnum(column.sorted, Sorted, Sorted.no);
+					if ('variable' in column && 'variables' in column) throw new Error(`Column ${quote1(column.id)} has both 'variable' and 'variables' fields.`);
+					let cell = $('<th/>').attr(ATTR_ELEMENT_ID, column.id).attr(ATTR_VARIABLE, 'variable' in column && column.variable ? column.variable : null).attr(ATTR_VARIABLES, 'variables' in column && column.variables?.length ? joinRow(column.variables) : null).toggleClass(CLASS_INDEX, column.index === true).toggleClass(CLASS_SORT_ASCEND, sorted === Sorted.asc).toggleClass(CLASS_SORT_DESCEND, sorted === Sorted.desc).appendTo(headRow);
+					switch (columnType) {
+						case ColumnType.text:
+							cell.addClass(CLASS_TYPE_TEXT);
+							break;
+						case ColumnType.html:
+							cell.addClass(CLASS_TYPE_HTML);
+							break;
+						case ColumnType.numeric:
+							cell.addClass(CLASS_TYPE_NUMERIC);
+							break;
+					}
+					injectContent(column.label, cell);
+				}
+			}
+			const logger$1 = log.logger('esc.widgets.data.lazy-table');
+
+			function render(options) {
+				logger$1.info('Rendering module \'esc-lazy-table\'.');
+				let live = options.live !== false;
+				if (!live) {
+					if (typeof options.lookup !== 'string') throw new Error('Lookup must be string-valued during pre-rendering.');
+				}
+				let size = toEnum(options.size, TableSize, TableSize.medium);
+				let idField = options.idField || undefined;
+				let stateless = (options.stateless === true) || undefined;
+				let maxNoSelected = options.maxNoSelected ?? undefined;
+				let enableScrolling = options.enableScrolling !== false;
+				let selectionMode = toEnum(options.selectionMode, SelectionMode, SelectionMode.none);
+				let visualType = toEnum(options.visualType, Type, Type.strong);
+				let style = toEnum(options.style, Style, Style.regular);
+				if (options.groups && options.columns) throw new Error('Cannot have both groups and columns - nest columns within groups.');
+				if (selectionMode !== SelectionMode.none && !idField) throw new Error('A selectable LazyTable must have an id field.');
+				let columns0 = options.groups ? options.groups.reduce((agg, g) => (agg.push(...g.columns), agg), []) : (options.columns || []);
+				validateOptions(columns0);
+				let widget = $('<div class="esc-lazy-table" />');
+				if (options.elusiveControls === true) widget.addClass('esc-m-elusive-controls');
+				if (options.reserveSpace === true) widget.addClass('esc-m-reserve-space');
+				if (options.enablePaging === true) widget.addClass('esc-m-enable-paging');
+				if (options.enableSizing === true) widget.addClass('esc-m-enable-sizing');
+				if (!columns0.length) widget.addClass('esc-js-is-empty');
+				let table = $('<table class="esc-table" />').appendTo(widget);
+				widget.addClass(`esc-m-size-${size}`);
+				if (!enableScrolling) widget.addClass(CLASS_NOT_SCROLLABLE);
+				if (visualType !== Type.strong) table.addClass(`esc-m-type-${visualType}`);
+				if (style !== Style.regular) table.addClass(`esc-m-style-${style}`);
+				if (options.name) widget.attr(ATTR_ELEMENT_ID, options.name);
+				if (selectionMode === SelectionMode.row) {
+					table.addClass(CLASS_SELECTABLE_ROW);
+				} else if (selectionMode === SelectionMode.cell) {
+					table.addClass(CLASS_SELECTABLE_CELL);
+				}
+				let head = $('<thead />').appendTo(table);
+				if (options.groups) renderGroups(options.groups, head);
+				if (options.columns) renderColumns(options.columns, head);
+				let columns;
+				let sorts = [];
+				for (let column of columns0) {
+					let sorted = toEnum(column.sorted, Sorted, Sorted.no);
+					if (sorted === Sorted.no && column.sortOrder != null) sorts.push(column);
+					if (column.format) {
+						if (typeof column.format !== 'string') throw new Error('Column format must be string-valued during pre-rendering.');
+						(columns || (columns = {}))[column.id] = column.format;
+					}
+				}
+				let sortOrder;
+				if (sorts.length) {
+					sorts.sort((a, b) => a.sortOrder - b.sortOrder);
+					sortOrder = sorts.map(c => c.id);
+				}
+				let body = $('<tbody />').appendTo(table);
+				$('<tr class="esc-c-previous" />').append($(`<td colspan="${columns0.length}" />`).append($('<button class="esc-button--icon esc-m-type-subtle esc-m-style-light esc-icon-angle-up" />').attr('title', i18n$1('previous')))).appendTo(body);
+				$('<tr class="esc-c-next" />').append($(`<td colspan="${columns0.length}" />`).append($('<button class="esc-button--icon esc-m-type-subtle esc-m-style-light esc-icon-angle-down" />').attr('title', i18n$1('next')))).appendTo(body);
+				let controls;
+				if (options.enablePaging === true) {
+					controls = $('<span class="esc-c-controls" />').appendTo(widget);
+					let enabled = options.enabled !== false;
+					$('<button class="esc-c-select-previous esc-button--icon esc-m-type-subtle esc-m-style-light esc-icon-angle-left" />').attr('tabindex', enabled ? '0' : '-1').attr('title', i18n$1('previous')).appendTo(controls);
+					$('<button class="esc-c-select-top esc-button--icon esc-m-type-subtle esc-m-style-light esc-icon-home" />').attr('tabindex', enabled ? '0' : '-1').attr('title', i18n$1('top')).appendTo(controls);
+					$('<button class="esc-c-select-next esc-button--icon esc-m-type-subtle esc-m-style-light esc-icon-angle-right" />').attr('tabindex', enabled ? '0' : '-1').attr('title', i18n$1('next')).appendTo(controls);
+				}
+				if (options.enableSizing === true) {
+					controls || (controls = $('<span class="esc-c-controls" />').appendTo(widget));
+					let enabled = options.enabled !== false;
+					$('<button class="esc-c-select-smaller esc-button--icon esc-m-type-subtle esc-m-style-light esc-icon-collapse" />').attr('tabindex', enabled ? '0' : '-1').attr('title', i18n$1('decrease_size')).appendTo(controls);
+					$('<button class="esc-c-select-larger esc-button--icon esc-m-type-subtle esc-m-style-light esc-icon-expand" />').attr('tabindex', enabled ? '0' : '-1').attr('title', i18n$1('increase_size')).appendTo(controls);
+				}
+				renderEnablable(widget, options);
+				let initOptions = {
+					columns,
+					idField,
+					maxNoSelected,
+					stateless,
+					lookup: options.lookup,
+					filter: options.filter || undefined,
+					sortOrder: sortOrder,
+					selection: options.selection?.length ? options.selection : undefined,
+					onSelection: options.onSelection,
+					selectables: options.selectables,
+					onDestroy: options.onDestroy
+				};
+				if (live) {
+					INIT.init(widget, initOptions);
+				} else {
+					preRenderSelectionProvider(widget, 'esc-lazy-table', initOptions);
+				}
+				widget2target(widget, options);
+				return widget;
+			}
+
+			function normalizeHeaders(headers) {
+				return headers && headers.map(entry => Array.isArray(entry) ? entry : splitHeader(entry));
+			}
+
+			function splitHeader(header) {
+				let k = header.indexOf(':');
+				if (k < 0) throw new Error(`String cannot be parsed as header key-value pair: '${header}'`);
+				return [header.substring(0, k).trim(), header.substring(k + 1).trim()];
+			}
+			const logger$2 = log.logger('esc.gadgets.lookup-dao');
+
+			function render$1(options) {
+				logger$2.info('Creating module \'esc-lookup-dao\'.');
+				let live = options.live !== false;
+				if (live) throw new Error('Do not create lookup DAO via rendering in live mode.');
+				let widget = $('<script type="text/plain"/>');
+				if (options.id) widget.attr('id', options.id);
+				let initOptions = {
+					url: options.url || undefined,
+					headers: normalizeHeaders(options.headers) || undefined,
+					withCredentials: options.withCredentials,
+					timeout: options.timeout,
+					validateSelection: options.validateSelection || undefined,
+					baseSelection: options.baseSelection || undefined,
+					selection: options.selection,
+					onDestroy: options.onDestroy
+				};
+				preRenderDestroyable(widget, 'esc-lookup-dao', initOptions);
+				widget2target(widget, options);
+				return widget;
+			}
+
+			function lazyTables($html, $, log) {
+				if (log) log('Searching for lazy tables ...');
+				set$($);
+				let elements = [];
+				let $tables = $html.find('.esc-table');
+				let ids = [];
+				for (let I = $tables.length, i = 0; i < I; i++) {
+					let $table = $tables.eq(i);
+					let $lazyTable = $table.parent('.esc-lazy-table');
+					if ($lazyTable.length) continue;
+					let $link = $table.find('tr.esc-m-row-external > td > a');
+					if (!$link.length) continue;
+					let $headers = $table.find('thead > tr');
+					if (!$headers.length) continue;
+					let $exhibit = $table.parent('.esc-exhibit--table');
+					if ($exhibit.length !== 1) throw new Error('Cannot find parent exhibit of lazy table.');
+					let id = $exhibit.attr('id');
+					if (id == null) throw new Error('Parent exhibit of lazy table must have id.');
+					if (log) log(`    ... processing lazy table '${id}'.`);
+					ids.push(id);
+					let tableId = id + '--table';
+					let lookupId = id + '--dao';
+					let url = $link.attr('href');
+					if (!url) throw new Error(`Lazy table '${id}' does not have expected link.`);
+					url = url.replace(/\.csv$/, '');
+					if ($headers.length !== 1 && $headers.length !== 2) throw new Error(`Expected 1 or 2header rows, not ${$headers.length}.`);
+					let $groups = $headers.length == 2 ? $headers.first().children('th') : null;
+					let $columns = $headers.last().children('th');
+					let J = $columns.length;
+					let groups = null;
+					let columns = null;
+					if ($groups) {
+						groups = [];
+						let j = 0;
+						for (let K = $groups.length, k = 0; k < K; k++) {
+							let $group = $groups.eq(k);
+							let colspan = $group.attr('colspan');
+							let noColumns = colspan ? str2integer(colspan) : 1;
+							let cs = [];
+							for (let l = 0; l < noColumns && j < J; l++, j++) {
+								let column = parseColumn($columns.eq(j), j);
+								cs.push(column);
+							}
+							groups.push({
+								label: $group.contents(),
+								columns: cs
+							});
+						}
+					} else {
+						columns = [];
+						for (let j = 0; j < J; j++) {
+							let column = parseColumn($columns.eq(j), j);
+							columns.push(column);
+						}
+					}
+					let tableOptions = {
+						live: false,
+						attributes: {
+							id: tableId
+						},
+						groups,
+						columns,
+						maxNoSelected: 0,
+						lookup: lookupId,
+						enableScrolling: false,
+						enablePaging: true,
+						enableSizing: true
+					};
+					$lazyTable = render(tableOptions);
+					$table.replaceWith($lazyTable);
+					let daoRenderOptions = {
+						live: false,
+						id: lookupId,
+						url,
+						selection: {}
+					};
+					let $dao = render$1(daoRenderOptions);
+					$dao.insertBefore($lazyTable);
+					elements.push($dao, $lazyTable);
+				}
+				if (log) log(ids.length ? `Found ${ids.length} lazy table(s): ${ids.join()}` : 'Found no lazy tables.');
+				return elements;
+			}
+
+			function parseColumn($column, pos) {
+				let type;
+				let format;
+				if ($column.hasClass('esc-m-text')) {
+					type = ColumnType.text;
+				} else if ($column.hasClass('esc-m-html')) {
+					type = ColumnType.html;
+				} else if ($column.hasClass('esc-m-numeric')) {
+					type = ColumnType.numeric;
+					format = $column.attr('data-esc-format') || undefined;
+				} else {
+					type = ColumnType.plain;
+				}
+				let index = $column.hasClass('esc-m-index');
+				return {
+					id: 'col_' + (pos + 1),
+					label: $column.contents(),
+					format,
+					sorted: Sorted.asc,
+					sortOrder: pos + 1,
+					type,
+					index
+				};
+			}
+			setLang(Language.en_US);
+			const ext = Object.freeze({
+				document: Object.freeze({
+					lazyTables
+				})
+			});
+			exports.ext = ext;
+			Object.defineProperty(exports, '__esModule', {
+				value: true
+			});
+		}(this.esc = this.esc || {}));
+	})();
+	document.addEventListener('DOMContentLoaded', function() {
+		esc.processDom();
+		(function() {
+			const logger = esc.log.logger('esc.document.preprocess');
+			const _updateAnchor = esc.data('b-update-anchor');
+			let updateAnchorHandle = -1;
+
+			function updateAnchor() {
+				cancelAnimationFrame(updateAnchorHandle);
+				updateAnchorHandle = requestAnimationFrame(() => {
+					requestAnimationFrame(_updateAnchor);
+				});
+			}
+			let updateLazyTablesHandle = -1;
+
+			function updateLazyTables() {
+				cancelAnimationFrame(updateLazyTablesHandle);
+				updateLazyTablesHandle = requestAnimationFrame(() => {
+					let toProcess = esc.ext.document.lazyTables(esc.$('html'), esc.$, message => logger.info(message));
+					esc.processDom(toProcess.map($el => $el.get(0)));
+				});
+			}
+			let updateMathJaxHandle = -1;
+
+			function updateMathJax() {
+				if (!!MathJax && !!MathJax.typesetPromise) {
+					cancelAnimationFrame(updateMathJaxHandle);
+					updateMathJaxHandle = requestAnimationFrame(() => MathJax.typesetPromise());
+				}
+			}
+			new MutationObserver(mutations => {
+				if (mutations.some(mutation => !!(mutation.addedNodes || []).length)) {
+					updateMathJax();
+				}
+			}).observe(document.getElementById('display-toc'), {
+				subtree: false,
+				childList: true
+			});
+			new MutationObserver(mutations => {
+				if (mutations.some(mutation => !!(mutation.addedNodes || []).length)) {
+					updateLazyTables();
+				}
+			}).observe(document.getElementById('loader-content'), {
+				subtree: false,
+				childList: true
+			});
+			new MutationObserver(mutations => {
+				if (mutations.some(mutation => !!(mutation.addedNodes || []).length)) {
+					updateMathJax();
+					updateAnchor();
+				}
+			}).observe(document.getElementById('loader-content'), {
+				subtree: true,
+				childList: true
+			});
+		})();
+		(function() {
+			const contentDiv = document.getElementById('display-content');
+			const tocDiv = document.getElementById('display-toc');
+			contentDiv.addEventListener('scroll', onScroll);
+			let lastScroll;
+
+			function onScroll() {
+				if (lastScroll === undefined) requestAnimationFrame(monitorTimeout);
+				lastScroll = Date.now();
+			}
+			const timeout = 100;
+
+			function monitorTimeout() {
+				let elapsed = Date.now() - lastScroll;
+				if (elapsed < timeout) {
+					requestAnimationFrame(monitorTimeout);
+				} else {
+					lastScroll = undefined;
+					updateToc();
+				}
+			}
+
+			function updateToc() {
+				let id = findCurrentSection();
+				scrollToToc(id);
+			}
+
+			function findCurrentSection() {
+				const bounds = contentDiv.getBoundingClientRect();
+				const r = .618;
+				const threshold = r * bounds.top + (1 - r) * bounds.bottom;
+				let id;
+				for (let section of contentDiv.querySelectorAll('[id^=esc-section-]')) {
+					let rect = section.getBoundingClientRect();
+					if (rect.top <= threshold) {
+						if (isFullyInView(section, bounds)) return section.id;
+						id = section.id;
+					} else {
+						return id;
+					}
+				}
+				return id;
+			}
+
+			function scrollToToc(id) {
+				if (!id) return;
+				id = id.replace('esc-', 'esc-toc--');
+				let a = document.getElementById(id);
+				if (!a) return;
+				let bounds = tocDiv.getBoundingClientRect();
+				if (!isFullyInView(a, bounds)) a.scrollIntoView({
+					behavior: 'smooth'
+				});
+			}
+
+			function isFullyInView(element, bounds) {
+				let rect = element.getBoundingClientRect();
+				return rect.top >= bounds.top && rect.bottom <= bounds.bottom;
+			}
+		})();
+	});
+	</script>
+</head>
+<body class="esc-page">
+	<main class="esc-panel--column esc-m-force-fit esc-h-height-viewport-full">
+		<script type="text/plain" id="b-update-anchor" data-esc-process-bindings="{&quot;script&quot;:&quot;function updateAnchor(){\n\n\tthis.selectAnchor || (this.selectAnchor = esc.data('select-anchor'));\n\tlet href = this.selectAnchor.getSelection();\n\n\tlet element = href &amp;&amp; document.getElementById(href);\n\n\tif(element)\n\t\trequestAnimationFrame(() =&gt; element.scrollIntoView({ behavior: 'smooth' }));\n\n}\n\nreturn updateAnchor;&quot;}"></script>
+		<script>
+		MathJax = {
+			loader: {
+				load: ['[tex]/tagformat']
+			},
+			tex: {
+				packages: {
+					'[+]': ['tagformat']
+				},
+				tagformat: {
+					id: tag => 'esc-equation-' + tag.replace(/\./g, '-')
+				}
+			},
+			startup: {
+				typeset: false
+			}
+		};
+		</script>
+		<script type="text/plain" id="select-app-state" data-esc-id="app_state" data-esc-process-aggregate-selector='{"fields":["theme","font-size"],"selection":{"font-size":"small","theme":"light"},"selectables":["select-theme::::selection[&apos;theme&apos;]","select-font-size::::selection[&apos;font-size&apos;]","stored-settings"]}'></script>
+		<script type="text/plain" id="stored-settings" data-esc-process-stored-selector='{"key":"stored-settings","version":"1.3","selection":{"theme":"light","font-size":"small"},"selectables":["select-app-state"]}'></script>
+		<script type="text/plain" id="select-anchor" data-esc-process-fragment-selector='{"onSelection":["this.updateAnchor || (this.updateAnchor = esc.data(&apos;b-update-anchor&apos;));\nthis.updateAnchor();"]}'></script>
+		<div class="esc-panel--column esc-t-light" data-esc-process-panel id="display-main">
+			<div class="esc-divider esc-m-elusive-controls" data-esc-process-divider='{"ratio":0.3}'>
+				<div class="esc-c-one" style="flex-grow: 0.30; flex-shrink: 0.30;">
+					<div class="esc-layout--column esc-m-gap-standard esc-m-force-fit esc-h-envelop" data-esc-process-panel>
+						<div class="esc-stackview" data-esc-process-stackview id="display-aside">
+							<div data-esc-id="toc" class="esc-is-selected">
+								<div class="esc-loader esc-scroller esc-h-envelop" data-esc-process-loader='{"url":"toc.htmlf","loadOnReady":true}' id="display-toc" style="padding-right: 1.5em"><template class="esc-c-placeholder"></template><template class="esc-c-error">
+										<p class="esc-error">Failed to load table of contents.</p>
+									</template></div>
+							</div>
+							<div data-esc-id="settings">
+								<div class="esc-h-envelop esc-scroller">
+									<h3>Settings</h3>
+									<div class="esc-layout--column esc-m-gap-standard" data-esc-process-panel>
+										<div class="esc-field" data-esc-process-field><label><span class="esc-c-label">Visual Theme</span></label>
+											<div class="esc-c-validation esc-c-error"></div>
+											<div class="esc-c-input">
+												<div class="esc-choices esc-js-has-selection" data-esc-id="theme" data-esc-process-choices="{&quot;onSelection&quot;:[&quot;this.main || (this.main = document.getElementById('display-main'));\n\nrequestAnimationFrame(() =&gt; {\n\n\t['light', 'dark'].forEach(theme =&gt; this.main.classList.toggle('esc-t-' + theme, theme === event.selection));\n\n\tesc.refreshStyle();\n\t\n});&quot;],&quot;selectables&quot;:[&quot;select-app-state::putSelection:theme&quot;]}" id="select-theme">
+													<div class="esc-c-options"><span class="esc-c-option" tabindex="0"><input type="radio" autocomplete="off" id="esc-sid-1" value="light" tabindex="-1" checked disabled><label for="esc-sid-1" tabindex="-1"><span class="esc-c-state"></span><span class="esc-c-label">Light</span></label></span><span class="esc-c-option" tabindex="0"><input type="radio" autocomplete="off" id="esc-sid-2" value="dark" tabindex="-1" disabled><label for="esc-sid-2" tabindex="-1"><span class="esc-c-state"></span><span class="esc-c-label">Dark</span></label></span></div>
+												</div>
+											</div>
+										</div>
+										<div class="esc-field" data-esc-process-field><label><span class="esc-c-label">Font Size</span></label>
+											<div class="esc-c-validation esc-c-error"></div>
+											<div class="esc-c-input">
+												<div class="esc-choices esc-js-has-selection" data-esc-id="font-size" data-esc-process-choices="{&quot;onSelection&quot;:[&quot;this.content || (this.content = document.getElementById('display-content'));\n\t\t\n\t\trequestAnimationFrame(() =&gt;\n\t\t\t['xsmall', 'small', 'medium', 'large'].forEach(fontSize =&gt;\n\t\t\t\tthis.content.classList.toggle('esc-h-font-' + fontSize, fontSize === event.selection)));&quot;],&quot;selectables&quot;:[&quot;select-app-state::putSelection:font-size&quot;]}" id="select-font-size">
+													<div class="esc-c-options"><span class="esc-c-option" tabindex="0"><input type="radio" autocomplete="off" id="esc-sid-3" value="xsmall" tabindex="-1" disabled><label for="esc-sid-3" tabindex="-1"><span class="esc-c-state"></span><span class="esc-c-label">Very Small</span></label></span><span class="esc-c-option" tabindex="0"><input type="radio" autocomplete="off" id="esc-sid-4" value="small" tabindex="-1" checked disabled><label for="esc-sid-4" tabindex="-1"><span class="esc-c-state"></span><span class="esc-c-label">Small</span></label></span><span class="esc-c-option" tabindex="0"><input type="radio" autocomplete="off" id="esc-sid-5" value="medium" tabindex="-1" disabled><label for="esc-sid-5" tabindex="-1"><span class="esc-c-state"></span><span class="esc-c-label">Medium</span></label></span><span class="esc-c-option" tabindex="0"><input type="radio" autocomplete="off" id="esc-sid-6" value="large" tabindex="-1" disabled><label for="esc-sid-6" tabindex="-1"><span class="esc-c-state"></span><span class="esc-c-label">Large</span></label></span></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="esc-tabs esc-m-layout-grid esc-m-type-ghost esc-js-has-selection esc-m-weight-0" data-esc-process-tabs='{"selectables":["display-aside"]}' id="select-aside" style="margin-right: 1.5em"><span class="esc-c-option esc-is-selected" data-esc-id="toc" tabindex="0"><span class="esc-c-icon esc-icon-toc"></span><span class="esc-c-label">Table of Contents</span></span><span class="esc-c-option" data-esc-id="settings" tabindex="0"><span class="esc-c-icon esc-icon-settings"></span><span class="esc-c-label">Settings</span></span></div>
+					</div>
+				</div>
+				<div class="esc-c-divider"><span class="esc-c-arrow-left"></span><span class="esc-c-arrow-right"></span></div>
+				<div class="esc-c-two" style="flex-grow: 0.70; flex-shrink: 0.70;">
+					<div id="display-content" class="esc-document-width esc-scroller esc-h-height-1 esc-h-padding esc-h-font-small" style="scroll-behavior: smooth; overscroll-anchor: none;">
+						<div class="esc-loader" data-esc-process-multi-loader='{"selection":["cover.htmlf","main.htmlf"],"onData":["if(event.data === &apos;success&apos;){\n\n\tthis.updateAnchor || (this.updateAnchor = esc.data(&apos;b-update-anchor&apos;));\n\tthis.updateAnchor();\n\n}"]}' id="loader-content"><template class="esc-c-placeholder"></template><template class="esc-c-error">
+								<p class="esc-error">Failed to load document.</p>
+							</template></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+</html>

@@ -1,0 +1,175 @@
+
+<div id="esc-section-1">
+<h1>1 Fun Formatting Options</h1>
+<p>Surrounding text with...</p>
+<p>One asterisk (*) or underscore (_) can <em>make text italicized!</em></p>
+<p>Two asterisks (**) or underscores (__) can <strong>make text bold!</strong></p>
+<p>Three asterisks (***) or underscores (___) can <strong><em>make text bold and italicized!</em></strong></p>
+<p>One backtick (&lsquo;) can <code>make text monospace!</code></p>
+<p>Using the caret symbol (^) and curly braces can make super<sup>script</sup></p>
+<p>Using the underscore (_) and curly braces can make sub<sub>script</sub></p>
+<p>The line about the bold and italicized text (and this one) went over the 80 character limit so it had to be split into two lines!</p>
+</div>
+
+<div id="esc-section-2">
+<h1>2 Creating Figures and Tables?</h1>
+
+<div id="esc-section-2-1">
+<h2>2.1 Figures</h2>
+<p>Each Figure can get a Title, Tag, Legend, Scale, and Image</p>
+<div id="esc-figure-2-1-1" class="esc-exhibit">
+<div class="esc-c-caption">Figure 2.1.1: Big Cat Picture I Stole from Wikipedia</div>
+<img class="esc-h-scale5" src="figure-2-1-1.jpg" alt="Big Cat Picture I Stole from Wikipedia" />
+
+<div class="esc-c-legend"><p>The scale is set to 5!</p>
+</div>
+</div>
+<div id="esc-figure-2-1-2" class="esc-exhibit">
+<div class="esc-c-caption">Figure 2.1.2: Small Cat Picture I Stole from Wikipedia</div>
+<img class="esc-h-scale1" src="figure-2-1-1.jpg" alt="Small Cat Picture I Stole from Wikipedia" />
+
+<div class="esc-c-legend"><p>The scale is set to 1!</p>
+</div>
+</div>
+<p>The scale of a Figure can be anywhere from 10 - 100% of the page!</p>
+<p>This is done using the SCALE feature, which takes a number from 1-10, multiplies it by 10, then uses that as the % of space the Figure should take up on the page!</p>
+<p>In the examples above...</p>
+<p>the Titles were "(Big/Small) Cat Picture I Stole from Wikipedia"</p>
+<p>the Tags cannot be seen, but are "big-cat" and "small-cat"</p>
+<p>the Legends were "The scale is set to (10/3)"</p>
+<p>the Scales were "100%" and "30%"</p>
+<p>the Image was the same cat between both Figures</p>
+<p>The code for Figure 1 can be found in <a href="#esc-section-6-1" title="Section: Figure 1">here</a>.</p>
+<p>The code for Figure 2 can be found in <a href="#esc-section-6-2" title="Section: Figure 2">here</a>.</p>
+</div>
+
+<div id="esc-section-2-2">
+<h2>2.2 Tables</h2>
+<p>Tables can be constructed and represented in a similar way to Figures.</p>
+<div id="esc-table-2-2-1" class="esc-exhibit--table">
+<div class="esc-c-caption">Table 2.2.1: Example Table</div>
+<table class="esc-table">
+	<thead>
+		<tr>
+			<th class="esc-m-text">column_1</th>
+			<th class="esc-m-text">column_2</th>
+			<th class="esc-m-text">column_3</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="esc-m-row-external">
+			<td colspan="3"><a href="table-2-2-1.csv">See file table-2-2-1.csv.</a></td>
+		</tr>
+	</tbody>
+</table>
+<div class="esc-c-legend"><p>Tables can have Legends too!</p>
+</div>
+</div>
+<p>Entries can be delimitted using the pipe operator (|) or commas (,).</p>
+<p>Each Line represents a Row.</p>
+<p>A Header can be included by seperating the first row using a dashed line.</p>
+<p>Just like Figures, Tables also have a Title, Tag, and Legend</p>
+<p>In the above Table...</p>
+<p>the Title is "Example Table"</p>
+<p>the Tag (unseen) is "my-table"</p>
+<p>the Legend is "Tables can have Legends too!"</p>
+<p>The code for this Table can be found in <a href="#esc-section-7-1" title="Section: Table 1">here</a>.</p>
+</div>
+</div>
+
+<div id="esc-section-3">
+<h1>3 Mathematical Functions and Symbols</h1>
+<p>Mathematical functions and symbols can be demonstrated using a single dollar sign ($) at the start and end of the line or three dollar signs at the start and end of a block of text.</p>
+<p>For example,</p>
+<p><span class="esc-math">\( \sqrt{25} = 5 \)</span></p>
+<p><span class="esc-math">\( 800.2 \approx 800.0 \)</span></p>
+<p><span class="esc-math">\( \frac{45}{50}=0.9 \)</span></p>
+<p>This is done using commands and syntax from LaTeX.</p>
+</div>
+
+<div id="esc-section-4">
+<h1>4 Using Verbatim Text</h1>
+<p>Using three backticks (&ldquo;&lsquo;) across two lines of allows the block of text within to be ignored. This lets leading and trailing whitespace persist.</p>
+<p>For example,</p>
+<pre><code>    This   Text   Is   Being<br>    Read     Back   Verbatim,<br> Spacing         Errors      And    All      !</code></pre>
+</div>
+
+<div id="esc-section-5">
+<h1>5 Numbered and Non-Numbered Lists</h1>
+<ol>
+<li><p>Lists can be made using bullet points or with numbers</p>
+</li>
+<li><p>This list uses numbers</p>
+</li>
+<li><p>But the system handles the counting for us</p>
+<ol>
+<li><p>In fact, the first set in this list was written with all "1."s</p>
+</li>
+<li><p>This part is weird too</p>
+</li>
+<li><p>The numbering on my end is backwards!</p>
+<ol>
+<li><p>Better yet, I started from 50!</p>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>Lists are based on indentation, just like Microsoft Word</p>
+</li>
+</ol>
+<ul>
+<li><p>Asterisks can be used to make bullet points</p>
+</li>
+<li><p>Hyphens can also be used</p>
+</li>
+<li><p>Plus can be used too!</p>
+<ul>
+<li><p>Just make sure that lists are seperated by at least 2 blank lines</p>
+</li>
+<li><p>If not, the formatting will persist!</p>
+<ul>
+<li><p>This can be useful for inserting a paragraph between items in a list!</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+<div id="esc-appendix-6" class="esc-appendix">
+<h1>6: Markdown Code for Figures</h1>
+
+<div id="esc-section-6-1">
+<h2>Figure 1</h2>
+<pre><code>FIGURE 1.: Big Cat Picture I Stole from Wikipedia<br><br>The scale is set to 5!<br><br>SCALE [5][Cat03.jpg]</code></pre>
+</div>
+
+<div id="esc-section-6-2">
+<h2>Figure 2</h2>
+<pre><code>FIGURE 2.: Small Cat Picture I Stole from Wikipedia<br><br>The scale is set to 1!<br><br>SCALE [1][Cat03.jpg]</code></pre>
+</div>
+</div>
+
+<div id="esc-appendix-7" class="esc-appendix">
+<h1>7: Markdown Code for Tables</h1>
+
+<div id="esc-section-7-1">
+<h2>Table 1</h2>
+<pre><code>TABLE 1.: Example Table #[my-table] NO-EXTERNALIZE<br><br>Tables can have Legends too!<br><br>-----<br>column_1 | column_2 | column_3<br>@Type string | @Type string | @Type string<br>-----<br>value_1 | value_2 | value_3<br>value_4 | value_5 | value_6<br>value_7 | value_8 | value_9<br>-----</code></pre>
+</div>
+</div>
+<div class="esc-toc">
+<h2 id="esc-list-of-tables">List of Tables</h2>
+	<ul>
+		<li><a id="esc-toc--table-2-2-1" href="#esc-table-2-2-1">Table 2.2.1: Example Table</a></li>
+	</ul>
+</div>
+<div class="esc-toc">
+<h2 id="esc-list-of-figures">List of Figures</h2>
+	<ul>
+		<li><a id="esc-toc--figure-2-1-1" href="#esc-figure-2-1-1">Figure 2.1.1: Big Cat Picture I Stole from Wikipedia</a></li>
+		<li><a id="esc-toc--figure-2-1-2" href="#esc-figure-2-1-2">Figure 2.1.2: Small Cat Picture I Stole from Wikipedia</a></li>
+	</ul>
+</div>
