@@ -3,19 +3,26 @@ Draft tests to validate your understanding of the tool and be prepared to discus
 
 a. What was the most useful feature of the tool?
 
+Being able to export a set of results to another csv is very useful. Additionally, having the ability to run multiple regexes at once over multiple files, with replacements is very useful as well.
+
+
 b. What was the biggest hurdle to using the tool?
 
-
+Having to escape so many characters can be frustrating. I'm not yet used to having to escape every backslash with another backslash, but the parentheses tripped me up too.
 
 
 2. What is the difference between the test and test-batch feature of escdata regex?
 
-
+escdata regex test will take one regular expression and one file to test it on. escdata regex test-batch uses a file containing multiple test instructions and runs them together. The "batch" is a collection of regex-file pairs.
 
 
 3. What flags are available in the Java dialect? How do they affect the regular expression?
 
-
+Some of the most common flags, and their effects, are:
+(?i) - the regex is now case-insensitive
+(?s) - the wildcard character (.) now matches newlines
+(?m) - ^ and $ now match at line breaks
+(?x) - the regex now ignores whitespace
 
 
 4. Recall the example in which we considered 10-digit student IDs that could not repeat any
@@ -23,5 +30,11 @@ digit 3 times in a row. The regex was: ^(?:(\d)(?!\1{2})){10}$.
 
 a. What was the returned capture group when using the JavaScript dialect (https://regex101.com/)?
 
+The returned capture group for a successful match was the final digit of the match.
+For example, 1234567890 had 0 as the final capture group.
+
 b. What is the returned capture group when using the Java dialect (escdata regex).
 How did you test this?
+
+A successful match using escdata regex did not seem to return a capture group at all.
+I tested this by using the replacement "--$1--", which would ideally replace successful matches with their capture group surrounded by two hyphens. This was not the case as all matching strings were replaced with only "----". Therefore, I believe that a capture group is not returned at all.
