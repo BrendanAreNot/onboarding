@@ -8,12 +8,12 @@ Being able to export a set of results to another csv is very useful. Additionall
 
 b. What was the biggest hurdle to using the tool?
 
-Having to escape so many characters can be frustrating. I'm not yet used to having to escape every backslash with another backslash, but the parentheses tripped me up too.
+Having to escape so many characters when using escdata regex test can be frustrating. I'm not yet used to having to escape every backslash with another backslash, but the parentheses tripped me up too. Thankfully, using escdata regex test-batch allows the files to be run without escaping characters.
 
 
 2. What is the difference between the test and test-batch feature of escdata regex?
 
-escdata regex test will take one regular expression and one file to test it on. escdata regex test-batch uses a file containing multiple test instructions and runs them together. The "batch" is a collection of regex-file pairs.
+escdata regex test will take one regular expression and one file to test it on. It can then produce a csv of the results. escdata regex test-batch uses a file containing multiple test instructions and runs them together. It can also export these results and each regex-file pair gets its own csv. The "batch" is a collection of regex-file pairs.
 
 
 3. What flags are available in the Java dialect? How do they affect the regular expression?
@@ -36,5 +36,5 @@ For example, 1234567890 had 0 as the final capture group.
 b. What is the returned capture group when using the Java dialect (escdata regex).
 How did you test this?
 
-A successful match using escdata regex did not seem to return a capture group at all.
-I tested this by using the replacement "--$1--", which would ideally replace successful matches with their capture group surrounded by two hyphens. This was not the case as all matching strings were replaced with only "----". Therefore, I believe that a capture group is not returned at all.
+A successful match using escdata regex returns the final digit that was captured, just like the Regex101 example. I tested this by replacing the successful groups with --$1-- (escaped to --\$1-- when using escdata regex test).
+For example, 0985681231 returned "--1--".

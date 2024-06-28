@@ -1,0 +1,4 @@
+Regex,Input,Output
+/^ab*c$/,text_test.csv,text_test_results.csv
+/^(?:(\d)(?!\1{2})){10}$/--$1--/,test.csv,num_test_results.csv
+
