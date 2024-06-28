@@ -72,3 +72,5 @@ The three available document types are article, book, and memo(texMemo). Memos t
 need not (and should not) simply be regurgitation of the documentation. Print it to both PDF
 and HTML using the escdocument tool. Copy your memo to the correct directory that will
 allow you to access it within your podman container and convert.
+
+See memo.md, memo.pdf, and the memo.html folder.

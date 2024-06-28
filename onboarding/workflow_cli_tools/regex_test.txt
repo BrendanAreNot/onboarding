@@ -1,0 +1,27 @@
+1. Experiment with escdata regex and be sure you can correctly use its various features.
+Draft tests to validate your understanding of the tool and be prepared to discuss them.
+
+a. What was the most useful feature of the tool?
+
+b. What was the biggest hurdle to using the tool?
+
+
+
+
+2. What is the difference between the test and test-batch feature of escdata regex?
+
+
+
+
+3. What flags are available in the Java dialect? How do they affect the regular expression?
+
+
+
+
+4. Recall the example in which we considered 10-digit student IDs that could not repeat any
+digit 3 times in a row. The regex was: ^(?:(\d)(?!\1{2})){10}$.
+
+a. What was the returned capture group when using the JavaScript dialect (https://regex101.com/)?
+
+b. What is the returned capture group when using the Java dialect (escdata regex).
+How did you test this?

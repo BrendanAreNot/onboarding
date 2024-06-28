@@ -111,3 +111,47 @@ return language === "fr" ? "Génial" : language === "de" : "Spitze" : "Awesome";
 What should this version now be called?
 
 This change fixes a typo and changes "Awsome" to "Awesome". This is a bug fix or Patch and the new version is 2.1.1
+
+
+
+2.1.6 - Continuous Integration Exercises
+
+1. Contact our DevOps engineer to get your login name and password for Jenkins access.
+Then, log in to Jenkins at jenkins.escmatrix.com
+
+
+
+
+2. Using Jenkins, you will idenfity the commit ID for the ESC release of a data project. Since
+Jenkins does not monitor projects that have been completed, let us know when you reach
+this step so we can choose a project for you to look at.
+
+
+
+
+3. Find the git repo for the project defined in the previous exercise. You should see the commit
+you found. Identify the prior commit and note the changes that occurred.
+
+
+
+
+4. Navigate to the help section on gitlab.escmatrix.com to view ESC naming conventions. When
+naming projects, what piece of information should all artifact IDs include?
+
+
+
+
+5. Rewrite the project name "Chattanooga_2018" so that it conforms to ESC artifact naming
+conventions.
+
+
+
+
+6. Take time to fully explore more of GitLab’s features. The Repository sub-menu on the left
+provides different options for examining the changes that have occurred in a repository over
+time. The Graph tool provides a visual representation of the changes to the repository, in-
+cluding identifying the creation of new branches for a project.
+
+
+
+
