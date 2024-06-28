@@ -1,0 +1,17 @@
+Input,Expected Output,Expected Match,Actual Output,Actual Match,Pass
+1234567890,,,----,true,false
+1112345678,,,1112345678,false,false
+1234445678,,,1234445678,false,false
+1234567888,,,1234567888,false,false
+0987654321,,,----,true,false
+0013434542,,,----,true,false
+2342345667,,,----,true,false
+0001231456,,,0001231456,false,false
+09871,,,09871,false,false
+11123,,,11123,false,false
+12223,,,12223,false,false
+12333,,,12333,false,false
+134121123123,,,134121123123,false,false
+123456789000,,,123456789000,false,false
+111234567890,,,111234567890,false,false
+123456777890,,,123456777890,false,false
