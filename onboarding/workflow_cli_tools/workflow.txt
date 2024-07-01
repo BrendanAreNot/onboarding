@@ -5,18 +5,22 @@
 1. Compare and contrast how we use snapshot and release versions of artifacts in the daily
 workflow.
 
-Snapshot artifacts are mutable and frequently changed. As the name suggests, Snapshots provide a view of the project at a specific point in development. Release artifacts are a more serious. These are immutable and not frequently changed. Any changes made to a release artifact aren't implemented until the next version of that artifact. Releases cannot be changed or updated for no reason. Developmental changes should be made with Snapshots, and Releases should contain the larger changes. In our workflow, changes are implemented as snapshots first, which are then collected and implemented en mass to the Release version, which is updated. Snapshots are like the kitchen and when the food is served it becomes a Release.
+Snapshot artifacts are mutable and frequently changed. As the name suggests, Snapshots provide a view of the project at a specific point in development. Release artifacts are more serious. These are immutable and not frequently changed. Any changes made to a release artifact aren't implemented until the next version of that artifact. Releases cannot be changed or updated for no reason. Developmental changes should be made with Snapshots, and Releases should contain the larger changes. In our workflow, changes are implemented as snapshots first, which are then collected and implemented en mass to the Release version, which is updated. Snapshots are like the kitchen and when the food is served it becomes a Release.
 
 
 2. Identify the classifiers and file types for the artifacts found in the following snapshot directory:
 s3://com.esc.data/snapshot/com/esc/data/tulsa-2014/2.3.0-SNAPSHOT/
 
-
+There appear to be 5 classifiers, each with 3 file types. Files are broken up into "analysis.dump", "load.dump", "report_md.zip", "bless", and "pom". Each file type is then followed by ".md5", ".sha1", or nothing at all. For example, "...-analysis.dump.md5", "...-report_md.zip", and "...-1.bless" are some file extensions for the artifacts. Every file follows the format of:
+[PROJECT NAME]-[SEMANTIC VERSION]-[DATE (of upload?)].[TIME (maybe?)]-[NUMBER?][CLASSIFIER AND TYPE]
+For example, one file has the name:
+tulsa-2014-2.3.0-20160609.223757-1-analysis.dump
+This means it was an analysis dump created for the Tulsa 2014 project and uploaded on June 9th, 2016 at 22:37:57
 
 
 3. Find the corresponding release directory for the snapshot in the previous question.
 
-
+The previous snapshot can be found in the s3://com.esc.data/snapshot/com/esc/data/tulsa-2014/2.2.1-SNAPSHOT/ directory. I found this by navigating to the .../tulsa-2014/ directory and finding the previous version of the 2014 Tulsa project.
 
 
 4. Copy the .pom file for the 2.3.0 release version of the Tulsa 2014 project to your local direc-
@@ -25,7 +29,31 @@ the line numbers on which the classifiers and types for the artifacts are declar
 write a summary of your findings (i.e., what does it mean for these artifacts to be listed as
 dependencies?).
 
+There are 5 dependencies listed. The information for these dependencies are:
 
+Group ID: com.esc
+Artifact ID: escalate-macro-project
+Version Number: 2.0.1
+
+Group ID: com.esc
+Artifact ID: escalate-macro-report
+Version Number: 2.0.2
+
+Group ID: com.esc
+Artifact ID: escalate-macro-utility
+Version Number: 1.2.0
+
+Group ID: com.esc
+Artifact ID: escalate-sql-resource
+Version Number: 1.1.1
+
+Group ID: com.esc.data
+Artifact ID: nces-2014
+Version Number: 1.0.0
+
+The <configuration> section from Line 225 to Line 243 contains nested sections for each artifact that has a <type> followed by a <classifier>. For example, Line 229 declares <type> "dump" and Line 230 declares <classifier> "analysis" for the <file> "${project.build.directory}/workspace/analysis.dump".
+
+Because these artifacts are listed as dependencies, the scripts require them to run. It "depends" on these artifacts. This makes sense considering that many of the dependencies are escalate features or macros. The last dependency is "nces-2014" which contains the data used for analysis. Without the macros and the data, the scripts would fail.
 
 
 5. Copy the latest ESCalate documentation file. This will be a great reference to have as you
@@ -34,7 +62,7 @@ s3://com.esc.artifacts/release/com/esc/doc/escalate/
 Copy the pdf to your local repo. There are .zip files you can download as well, but the pdf is
 easier to search.
 
-Copied!
+Copied! Used aws s3 cp [FILE TO COPY] [LOCAL LOCATION TO STORE FILE].
 
 2.1.3 - Semantic Versioning Exercises
 
